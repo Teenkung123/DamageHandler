@@ -1,0 +1,4 @@
+name: DamageHandler
+version: '${version}'
+main: com.teenkung.damagehandler.DamageHandler
+api-version: 1.19
