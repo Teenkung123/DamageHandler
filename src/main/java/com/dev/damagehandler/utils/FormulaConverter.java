@@ -11,7 +11,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,18 +36,23 @@ public class FormulaConverter {
         String patternString = "\\$(.*?)\\$";
         Pattern pattern = Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(formula);
+        StringBuilder sb = new StringBuilder(formula);
 
         while (matcher.find()) {
             String variableName = matcher.group(1);
 
             String variableValue = variables.get(variableName);
             if (hasVariable(variableValue)) {
-                formula = formula.replace(matcher.group(), String.valueOf(b(a(variableValue, variables, placeholders), placeholders)));
+                String replacement = String.valueOf(b(a(variableValue, variables, placeholders), placeholders));
+                sb.replace(matcher.start(), matcher.end(), replacement);
+                matcher.region(matcher.start(), sb.length());
             } else {
-                formula = formula.replace(matcher.group(), String.valueOf(b(variableValue, placeholders)));
+                String replacement = String.valueOf(b(variableValue, placeholders));
+                sb.replace(matcher.start(), matcher.end(), replacement);
+                matcher.region(matcher.start(), sb.length());
             }
         }
-        return formula;
+        return sb.toString();
     }
 
 
@@ -74,13 +81,13 @@ public class FormulaConverter {
     }
 
     private static boolean hasVariable(String input) {
-        boolean output = false;
         Pattern pattern = Pattern.compile("\\$(.*?)\\$");
         Matcher matcher = pattern.matcher(input);
+        Set<String> variableSet = new HashSet<>();
         while (matcher.find()) {
-            output = true;
+            variableSet.add(matcher.group(1));
         }
-        return output;
+        return !variableSet.isEmpty();
     }
 
     /**

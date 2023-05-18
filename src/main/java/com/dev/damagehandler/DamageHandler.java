@@ -8,6 +8,7 @@ import com.dev.damagehandler.events.deal_damage.PlayerAttack;
 import com.dev.damagehandler.listener.AttackEventListener;
 import com.dev.damagehandler.utils.ConfigLoader;
 import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
+import com.dev.damagehandler.utils.ElementalInflect;
 import com.dev.damagehandler.utils.manager.EntityDataManager;
 import com.dev.damagehandler.events.attack_handle.RemoveVanillaDamage;
 import com.google.common.io.ByteStreams;
@@ -20,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.UUID;
 
 public final class DamageHandler extends JavaPlugin {
 
@@ -35,15 +37,16 @@ public final class DamageHandler extends JavaPlugin {
     //  3. Resistance Reduction & Defense Reduction
     //  4. Entity Elemental Inflection Status
     //  5. Elemental Reaction
-    //  6. Configurable Damage Equation
+    //  6. Configurable Damage Equation (Done)
     //  7. More...
 
     private static DamageHandler instance;
-    private static HashMap<UUID, Long> inflect = new HashMap<UUID, Long>();
+    private static ElementalInflect elementalInflect;
 
     @Override
     public void onEnable() {
         instance = this;
+        elementalInflect = new ElementalInflect();
         loadResource(this, "config.yml");
         getConfig().options().copyDefaults();
         saveDefaultConfig();
@@ -79,6 +82,7 @@ public final class DamageHandler extends JavaPlugin {
     public static DamageHandler getInstance() {
         return instance;
     }
+    public static ElementalInflect getElementalInflect() { return elementalInflect; }
 
     //What the hell is this?
     private static File loadResource(Plugin plugin, String resource) {
