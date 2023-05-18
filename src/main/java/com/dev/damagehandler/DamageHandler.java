@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 public final class DamageHandler extends JavaPlugin {
 
@@ -38,6 +39,7 @@ public final class DamageHandler extends JavaPlugin {
     //  7. More...
 
     private static DamageHandler instance;
+    private static HashMap<UUID, Long> inflect = new HashMap<UUID, Long>();
 
     @Override
     public void onEnable() {
