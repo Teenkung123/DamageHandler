@@ -1,4 +1,16 @@
 name: DamageHandler
 version: '${version}'
-main: com.teenkung.damagehandler.DamageHandler
+main: com.dev.damagehandler.DamageHandler
 api-version: 1.19
+authors:
+  - Teenkung123
+  - downYoutube2548
+
+#depend:
+#  - MythicLib
+#  - MythicMobs
+#  - MMOItems
+#  - MMOCore
+#softdepend:
+#  - PlaceholderAPI
+#  - HolographicDisplays
