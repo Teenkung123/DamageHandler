@@ -1,0 +1,359 @@
+General:
+  Inflect-Time: 10000
+  Default-Element: PHYSICAL
+  disable-vanilla-damage: true
+
+Elemental-Modifier:
+  # <Damage Cause>: <Element>
+  FIRE: PYRO
+  FIRE_TICK: PYRO
+  HOT_FLOOR: PYRO
+  LAVA: PYRO
+  FREEZE: CRYO
+
+# don't forget to disable damage-indicator in MythicLib config.yml if you enable this
+Indicators:
+  enable: true
+  decimal-format: '0.0'
+  format: '{color}{icon} {value}'
+  crit-format: '{color}&l{icon} {value}'
+  custom-font:
+    enabled: false
+    normal:
+      '0': 'ᜀ'
+      '1': 'ᜁ'
+      '2': 'ᜂ'
+      '3': 'ᜃ'
+      '4': 'ᜄ'
+      '5': 'ᜅ'
+      '6': 'ᜆ'
+      '7': 'ᜇ'
+      '8': 'ᜈ'
+      '9': 'ᜉ'
+      'dot': 'ᜊ'
+      'inter': 'ᜍ'
+    crit:
+      '0': 'ᜐ'
+      '1': 'ᜑ'
+      '2': 'ᜒ'
+      '3': 'ᜓ'
+      '4': '᜔'
+      '5': '᜕'
+      '6': '᜖'
+      '7': '᜗'
+      '8': '᜘'
+      '9': '᜙'
+      'dot': 'ᜋ'
+      'inter': 'ᜍ'
+  split-holograms: true
+  # required Holographic Display
+  radial-velocity: -0.3
+  gravity: 0
+  initial-upward-velocity: 0.15
+  entity-height-percent: 0.5
+  y-offset: 0
+
+# built-in placeholders that can use in formula
+#
+# #damage#
+#
+# Player:
+# #is-critical#
+# #[attacker/victim]-level#
+# #[attacker/victim]-critical-rate#
+# #[attacker/victim]-critical-damage#
+# #[attacker/victim]-attack-buff#
+# #[attacker/victim]-attack-buff-percent#
+# #[attacker/victim]-elemental-damage-bonus#
+# #[attacker/victim]-all-elemental-damage-bonus#
+# #[attacker/victim]-elemental-resistance#
+# #[attacker/victim]-defense#
+# #[attacker/victim]-ignore-defense#
+#
+# Mob:
+# #[attacker/victim]-is-mythic-mob#
+# #[attacker/victim]-level#
+# #[attacker/victim]-elemental-resistance#
+# #[attacker/victim]-defense#
+#
+# PlaceholderAPI are supported
+#
+Damage-Calculation:
+
+  Player-Player:
+    formula: '$ATotalDamage$ * $VDEFMulti$ * $VElementalRESMulti$'
+    variables:
+      ATotalDamage: 'if(#is-critical#, $Crit$, $NoCrit$)'
+      Crit: '$AttackerATK$ * $AttackerElementBonusMulti$ * $AttackerCritMulti$'
+      NoCrit: '$AttackerATK$ * $AttackerElementBonusMulti$'
+      AttackerATK: '(#damage# * (1+(#attacker-attack-buff-percent#/100))) + #attacker-attack-buff#'
+      AttackerElementBonusMulti: '1 + ((#attacker-elemental-damage-bonus# + #attacker-all-elemental-damage-bonus#) / 100)'
+      AttackerCritMulti: '1 + (#attacker-critical-damage#/100)'
+
+      VDEFMulti: '1 - (($ADEFIgnoreMulti$ * #victim-defense#) / (#victim-defense# + (5 * #attacker-level#)+500))'
+      ADEFIgnoreMulti: '1 - (#attacker-ignore-defense# / 100)'
+
+      VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
+      VElementalResPercent: '#victim-elemental-resistance#/100'
+      A: '1 - (#victim-elemental-resistance#/2/100)'
+      B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
+      C: '1 - (#victim-elemental-resistance#/100)'
+      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+
+  Player-Mob:
+    formula: '$ATotalDamage$ * $VDEFMulti$ * $VElementalRESMulti$'
+    variables:
+      ATotalDamage: 'if(#is-critical#, $Crit$, $NoCrit$)'
+      Crit: '$AttackerATK$ * $AttackerElementBonusMulti$ * $AttackerCritMulti$'
+      NoCrit: '$AttackerATK$ * $AttackerElementBonusMulti$'
+      AttackerATK: '(#damage# * (1+(#attacker-attack-buff-percent#/100))) + #attacker-attack-buff#'
+      AttackerElementBonusMulti: '1 + ((#attacker-elemental-damage-bonus# + #attacker-all-elemental-damage-bonus#) / 100)'
+      AttackerCritMulti: '1 + (#attacker-critical-damage#/100)'
+
+      VDEFMulti: '1 - (($ADEFIgnoreMulti$ * #victim-defense#) / (#victim-defense# + (5 * #attacker-level#)+500))'
+      ADEFIgnoreMulti: '1 - (#attacker-ignore-defense# / 100)'
+
+      VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
+      VElementalResPercent: '$VElementalRES$/100'
+      VElementalRES: 'if(#victim-is-mythic-mob#,#victim-elemental-resistance#,0)'
+      A: '1 - (#victim-elemental-resistance#/2/100)'
+      B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
+      C: '1 - (#victim-elemental-resistance#/100)'
+      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+
+  Mob-Player:
+    formula: '#damage# * $VDEFMulti$ * $VElementalRESMulti$'
+    variables:
+      VDEFMulti: '1 - (#victim-defense# / (#victim-defense# + (5 * $ALevel$) + 500))'
+      ALevel: 'if(#attacker-is-mythic-mob#,#attacker-level#,1)'
+
+      VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
+      VElementalResPercent: '#victim-elemental-resistance#/100'
+      A: '1 - (#victim-elemental-resistance#/2/100)'
+      B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
+      C: '1 - (#victim-elemental-resistance#/100)'
+      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+
+  Mob-Mob:
+    formula: '#damage# * $VDEFMulti$ * $VElementalRESMulti$'
+    variables:
+      VDEFMulti: '1 - (#victim-defense# / (#victim-defense# + (5 * $ALevel$) + 500))'
+      ALevel: 'if(#attacker-is-mythic-mob#,#attacker-level#,1)'
+
+      VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
+      VElementalResPercent: '$VElementalRES$/100'
+      VElementalRES: 'if(#victim-is-mythic-mob#,#victim-elemental-resistance#,0)'
+      A: '1 - (#victim-elemental-resistance#/2/100)'
+      B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
+      C: '1 - (#victim-elemental-resistance#/100)'
+      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+
+  Misc-Player:
+    formula: '#damage# * $VDEFMulti$ * $VElementalRESMulti$'
+    variables:
+
+      VDEFMulti: '1 - (VictimDEF / (VictimDEF + 5 + 500))'
+
+      VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
+      VElementalResPercent: '#victim-elemental-resistance#/100'
+      A: '1 - (#victim-elemental-resistance#/2/100)'
+      B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
+      C: '1 - (#victim-elemental-resistance#/100)'
+      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+
+  Misc-Mob:
+    formula: '#damage# * $VDEFMulti$ * $VElementalRESMulti$'
+    variables:
+
+      VDEFMulti: '1 - (VictimDEF / (VictimDEF + 5 + 500))'
+
+      VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
+      VElementalResPercent: '$VElementalRES$/100'
+      VElementalRES: 'if(#victim-is-mythic-mob#,#victim-elemental-resistance#,0)'
+      A: '1 - (#victim-elemental-resistance#/2/100)'
+      B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
+      C: '1 - (#victim-elemental-resistance#/100)'
+      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+
+Elements:
+  PHYSICAL:
+    Inflect-Skill: []
+  ANEMO:
+    Inflect-Skill: []
+  GEO:
+    Inflect-Skill: []
+  ELECTRO:
+    Inflect-Skill: []
+  DENDRO:
+    Inflect-Skill: []
+  HYDRO:
+    Inflect-Skill: []
+  PYRO:
+    Inflect-Skill: []
+  CRYO:
+    Inflect-Skill: []
+
+Reactions:
+    Vaporize:
+        Inflect-Skill: []
+    Melt:
+        Inflect-Skill: []
+    Superconduct:
+        Inflect-Skill: []
+    Overload:
+        Inflect-Skill: []
+    Electro-Charged:
+        Inflect-Skill: []
+    Swirl:
+        Inflect-Skill: []
+    Shatter:
+        Inflect-Skill: []
+
+Stats:
+  BOOLEAN_STAT:
+    AST_DISABLE_REGULAR_DAMAGE:
+      Name: Disable Regular Damage
+      Icon:
+        Name: Disable Regular Damage
+        Material: SNOWBALL
+        Lore: [ '&7Disable regular damage of this weapon.' ]
+
+  DOUBLE_STAT:
+    AST_CRITICAL_RATE:
+      Name: Critical Rate
+      Icon:
+        Name: Critical Rate (%)
+        Material: NETHERITE_SWORD
+        Lore: [ '&7Increase critical rate' ]
+    AST_CRITICAL_DAMAGE:
+      Name: Critical Damage
+      Icon:
+        Name: Critical Damage (%)
+        Material: NETHERITE_SWORD
+        Lore: [ '&7Increase critical damage' ]
+
+    AST_ELEMENTAL_RESISTANCE:
+      Name: Elemental Resistance
+      Icon:
+        Name: "%element% Resistance (%)"
+        Lore: [ '&7Resistance to %element% damage' ]
+  #  ELEMENTAL_RESISTANCE_REDUCTION:
+  #    Name: Elemental Resistance Reduction
+  #    Icon:
+  #      Name: "%element% Resistance Reduction (%)"
+  #      Lore: [ '&7Reduce Resistance from %element% damage' ]
+    AST_ELEMENTAL_DAMAGE_BONUS:
+      Name: Elemental Damage Bonus
+      Icon:
+        Name: "%element% Damage Bonus (%)"
+        Lore: [ '&7Increase %element% damage' ]
+
+    AST_ALL_ELEMENTAL_RESISTANCE:
+      Name: Elemental Resistance
+      Icon:
+        Name: Elemental Resistance (%)
+        Material: NETHER_STAR
+        Lore: ['&7Resistance to all elemental damage']
+  #  ALL_ELEMENTAL_RESISTANCE_REDUCTION:
+  #    Name: Elemental Resistance Reduction
+  #    Icon:
+  #      Name: Elemental Resistance Reduction (%)
+  #      Material: NETHER_STAR
+  #      Lore: [ '&7Reduce Resistance from all elemental damage' ]
+    AST_ALL_ELEMENTAL_DAMAGE_BONUS:
+      Name: Elemental Damage Bonus
+      Icon:
+        Name: Elemental Damage Bonus (%)
+        Material: NETHER_STAR
+        Lore: [ '&7Increase all elemental damage' ]
+
+    AST_ELEMENTAL_MASTERY:
+      Name: Elemental Mastery
+      Icon:
+        Name: Elemental Mastery
+        Material: EMERALD
+        Lore: ['&7Increase all elemental reaction damages']
+
+
+
+    AST_IGNORE_DEFENSE:
+      Name: Ignore Defense
+      Icon:
+        Name: Ignore Defense (%)
+        Material: NETHERITE_AXE
+        Lore: ['&7Reduce all defense']
+  #  DEFENSE_REDUCTION:
+  #    Name: Defense Reduction
+  #    Icon:
+  #      Name: Defense Reduction (%)
+  #      Material: NETHERITE_AXE
+  #      Lore: [ '&7Reduce all defense' ]
+
+
+
+    AST_ATTACK_DAMAGE_BUFF:
+      Name: Attack Damage Buff
+      Icon:
+        Name: Attack Damage Buff
+        Material: NETHERITE_AXE
+        Lore: [ '&7Reduce all defense' ]
+    AST_ATTACK_DAMAGE_BUFF_PERCENT:
+      Name: Attack Damage Buff (%)
+      Icon:
+        Name: Attack Damage Buff (%)
+        Material: NETHERITE_AXE
+        Lore: [ '&7Reduce all defense' ]
+
+
+
+    AST_HEALING_BONUS:
+      Name: Healing Bonus
+      Icon:
+        Name: Healing Bonus (%)
+        Material: GOLDEN_APPLE
+        Lore: ['&7Increase all healing']
+    AST_INCOMING_HEALING_BONUS:
+      Name: Incoming Healing Bonus
+      Icon:
+        Name: Incoming Healing Bonus (%)
+        Material: GOLDEN_APPLE
+        Lore: ['&7Increase all incoming healing']
+
+
+
+    AST_SANITY_RECHARGE:
+      Name: Sanity Recharge
+      Icon:
+        Name: Sanity Recharge (%)
+        Material: NETHER_STAR
+        Lore: ['&7Increase all sanity recharge']
+    AST_SHIELD_STRENGTH:
+      Name: Shield Strength
+      Icon:
+        Name: Shield Strength (%)
+        Material: SHIELD
+        Lore: ['&7Increase all shield strength']
+    AST_ACCURACY:
+      Name: Accuracy
+      Icon:
+        Name: Accuracy
+        Material: ARROW
+        Lore: ['&7Increase all accuracy']
+    AST_HIDDEN_ACCURACY:
+      Name: Hidden Accuracy
+      Icon:
+        Name: Hidden Accuracy
+        Material: ARROW
+        Lore: ['&7Increase all accuracy']
+    AST_EVASION:
+      Name: Evasion
+      Icon:
+        Name: Evasion
+        Material: FEATHER
+        Lore: ['&7Increase all evasion']
+    AST_HIDDEN_EVASION:
+      Name: Hidden Evasion
+      Icon:
+        Name: Hidden Evasion
+        Material: FEATHER
+        Lore: ['&7Increase all evasion']
