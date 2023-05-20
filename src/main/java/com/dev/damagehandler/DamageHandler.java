@@ -8,7 +8,7 @@ import com.dev.damagehandler.events.deal_damage.PlayerAttack;
 import com.dev.damagehandler.listener.AttackEventListener;
 import com.dev.damagehandler.utils.ConfigLoader;
 import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
-import com.dev.damagehandler.utils.ElementalInflect;
+import com.dev.damagehandler.utils.inflect.ElementalInflect;
 import com.dev.damagehandler.utils.manager.EntityDataManager;
 import com.dev.damagehandler.events.attack_handle.RemoveVanillaDamage;
 import com.google.common.io.ByteStreams;
@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.UUID;
 
 public final class DamageHandler extends JavaPlugin {
 
@@ -51,6 +49,7 @@ public final class DamageHandler extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         ConfigLoader.loadConfig();
+        ElementalInflect.startTick();
 
         //Register EventListener
         Bukkit.getPluginManager().registerEvents(new MythicMechanicLoad(), this);

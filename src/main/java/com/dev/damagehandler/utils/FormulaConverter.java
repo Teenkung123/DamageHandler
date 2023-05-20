@@ -2,14 +2,8 @@ package com.dev.damagehandler.utils;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-import net.objecthunter.exp4j.function.Function;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,11 +11,33 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * NOTE: don't dare to read the code of this class
+ *
+ * This class is used to evaluate String formula to be calculated the damage
+ */
 public class FormulaConverter {
+
+    /**
+     * Calculate the value obtained from the given formula
+     *
+     * @param formula String formula input
+     * @param variables variables
+     * @param placeholders built-in placeholders
+     * @return the calculated value
+     */
     public static double convert(String formula, Map<String, String> variables, Map<String, String> placeholders) {
         return b(a(formula, variables, placeholders), placeholders);
     }
 
+    /**
+     * Calculate the value obtained from the given equation
+     *
+     * @param formula String formula input
+     * @param variables variables
+     * @param placeholders built-in placeholders
+     * @return the calculated value
+     */
     public static double convert(String formula, ConfigurationSection variables, Map<String, String> placeholders) {
 
         Map<String, String> map = new HashMap<>();
@@ -32,6 +48,15 @@ public class FormulaConverter {
         return b(a(formula, map, placeholders), placeholders);
     }
 
+    /**
+     * Method for solving equations by eliminating variables until the equation becomes free of variables,
+     * allowing it to be further calculated in the next step.
+     *
+     * @param formula String formula input
+     * @param variables variables
+     * @param placeholders built-in placeholders
+     * @return The formula for calculation after variables have been eliminated.
+     */
     private static String a(String formula, Map<String, String> variables, Map<String, String> placeholders) {
         String patternString = "\\$(.*?)\\$";
         Pattern pattern = Pattern.compile(patternString);
@@ -56,6 +81,13 @@ public class FormulaConverter {
     }
 
 
+    /**
+     * Evaluate string formula to calculated value
+     *
+     * @param formula String formula input without variables
+     * @param placeholders built-in placeholders
+     * @return the calculated value
+     */
     private static double b(String formula, Map<String, String> placeholders) {
 
         Pattern pattern1 = Pattern.compile("#(.*?)#");
@@ -91,6 +123,7 @@ public class FormulaConverter {
     }
 
     /**
+     * Method to convert if function in formula
      *
      * @param input match regex "^if\(([\s\S]+),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)\)$"
      *              Format: "if(<condition>,<double>,<double>)"

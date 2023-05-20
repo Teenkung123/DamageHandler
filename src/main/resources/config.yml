@@ -1,5 +1,5 @@
 General:
-  Inflect-Time: 10000
+  Inflect-Time: 200
   Default-Element: PHYSICAL
   disable-vanilla-damage: true
 
@@ -75,8 +75,6 @@ Indicators:
 # #[attacker/victim]-level#
 # #[attacker/victim]-elemental-resistance#
 # #[attacker/victim]-defense#
-#
-# PlaceholderAPI are supported
 #
 Damage-Calculation:
 
