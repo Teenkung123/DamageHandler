@@ -1,15 +1,15 @@
 package com.dev.damagehandler.stats.provider;
 
 import io.lumine.mythic.lib.api.item.NBTItem;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import io.lumine.mythic.lib.api.stat.provider.StatProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * The class to use override stupid "EntityStatProvider" class

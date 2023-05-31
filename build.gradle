@@ -6,7 +6,7 @@ plugins {
 group = 'com.dev'
 version = '1.0-BETA'
 
-libsDirName = '../../../../../Server/Test Server 1.19.4/plugins'
+libsDirName = '../../../Desktop/Server/Test Server 1.19.4/plugins'
 
 repositories {
     mavenCentral()
@@ -34,6 +34,14 @@ repositories {
         name = "placeholder-api"
         url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
     }
+    maven {
+        name = "protocolLibs"
+        url "https://repo.dmulloy2.net/repository/public/"
+    }
+    maven {
+        name = "holographic-display"
+        url "https://repo.codemc.io/repository/maven-public/"
+    }
 }
 
 dependencies {
@@ -44,6 +52,8 @@ dependencies {
     compileOnly "io.lumine:Mythic-Dist:5.2.1"
     compileOnly "me.clip:placeholderapi:2.11.3"
     implementation "de.tr7zw:item-nbt-api-plugin:2.11.2"
+    compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "5.0.0";
+    compileOnly 'me.filoghost.holographicdisplays:holographicdisplays-api:3.0.0'
 }
 
 shadowJar {

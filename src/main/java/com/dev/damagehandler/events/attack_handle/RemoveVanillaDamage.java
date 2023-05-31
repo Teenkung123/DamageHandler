@@ -20,7 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public class RemoveVanillaDamage implements Listener {
 
     @EventHandler(
-            priority = EventPriority.HIGHEST,
+            priority = EventPriority.HIGH,
             ignoreCancelled = true
     )
     public void onDamage(EntityDamageEvent event) {

@@ -1,16 +1,21 @@
 package com.dev.damagehandler;
 
-import com.dev.damagehandler.events.*;
+import com.dev.damagehandler.commands.core;
+import com.dev.damagehandler.events.EntityDeath;
+import com.dev.damagehandler.events.JoinEvent;
+import com.dev.damagehandler.events.MythicMechanicLoad;
 import com.dev.damagehandler.events.attack_handle.ElementModifier;
+import com.dev.damagehandler.events.attack_handle.InflectElement;
+import com.dev.damagehandler.events.attack_handle.RemoveVanillaDamage;
 import com.dev.damagehandler.events.deal_damage.MiscAttack;
 import com.dev.damagehandler.events.deal_damage.MobAttack;
 import com.dev.damagehandler.events.deal_damage.PlayerAttack;
+import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
 import com.dev.damagehandler.listener.AttackEventListener;
 import com.dev.damagehandler.utils.ConfigLoader;
-import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
+import com.dev.damagehandler.utils.debuff.Debuff;
 import com.dev.damagehandler.utils.inflect.ElementalInflect;
 import com.dev.damagehandler.utils.manager.EntityDataManager;
-import com.dev.damagehandler.events.attack_handle.RemoveVanillaDamage;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -20,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Objects;
 
 public final class DamageHandler extends JavaPlugin {
 
@@ -40,16 +46,21 @@ public final class DamageHandler extends JavaPlugin {
 
     private static DamageHandler instance;
     private static ElementalInflect elementalInflect;
+    private static Debuff debuff;
 
     @Override
     public void onEnable() {
         instance = this;
         elementalInflect = new ElementalInflect();
+        debuff = new Debuff();
         loadResource(this, "config.yml");
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         ConfigLoader.loadConfig();
         ElementalInflect.startTick();
+        Debuff.startTick();
+
+        Objects.requireNonNull(Bukkit.getPluginCommand("damagehandle")).setExecutor(new core());
 
         //Register EventListener
         Bukkit.getPluginManager().registerEvents(new MythicMechanicLoad(), this);
@@ -62,6 +73,7 @@ public final class DamageHandler extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AttackEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new ASTDamageIndicators(getConfig().getConfigurationSection("Indicators")), this);
         Bukkit.getPluginManager().registerEvents(new RemoveVanillaDamage(), this);
+        Bukkit.getPluginManager().registerEvents(new InflectElement(), this);
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm reload");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mi reload all");
@@ -82,6 +94,7 @@ public final class DamageHandler extends JavaPlugin {
         return instance;
     }
     public static ElementalInflect getElementalInflect() { return elementalInflect; }
+    public static Debuff getDebuff() { return debuff; }
 
     //What the hell is this?
     private static File loadResource(Plugin plugin, String resource) {

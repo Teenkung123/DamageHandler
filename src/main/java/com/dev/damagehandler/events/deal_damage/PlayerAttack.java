@@ -2,6 +2,8 @@ package com.dev.damagehandler.events.deal_damage;
 
 import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.utils.FormulaConverter;
+import com.dev.damagehandler.utils.debuff.debuffs.DefenseReduction;
+import com.dev.damagehandler.utils.debuff.debuffs.ElementalResistanceReduction;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.lib.api.event.PlayerAttackEvent;
@@ -9,11 +11,6 @@ import io.lumine.mythic.lib.damage.DamagePacket;
 import io.lumine.mythic.lib.player.PlayerMetadata;
 import net.Indyuce.mmocore.api.player.PlayerData;
 import net.Indyuce.mmocore.api.player.stats.PlayerStats;
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
-import net.objecthunter.exp4j.function.Function;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,16 +19,17 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import javax.script.ScriptException;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class use to deal damage from Player -> Mob or Player
  */
 public class PlayerAttack implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerAttack(PlayerAttackEvent event) throws ScriptException{
 
         Player attacker = event.getAttacker().getPlayer();
@@ -57,6 +55,9 @@ public class PlayerAttack implements Listener {
             boolean isCritical = new Random().nextDouble() < AttackerCRITRate / 100;
             if (isCritical) event.getDamage().registerElementalCriticalStrike(packet.getElement());
 
+            DefenseReduction dr = DamageHandler.getDebuff().getDebuff(victim.getUniqueId()).getActivateDebuff(DefenseReduction.class, new String[]{}, new String[]{});
+            ElementalResistanceReduction er = DamageHandler.getDebuff().getDebuff(victim.getUniqueId()).getActivateDebuff(ElementalResistanceReduction.class, new String[]{"element"}, new String[]{Element});
+
             // add built-in placeholders to be use in configuration
             Map<String, String> placeholders = new HashMap<>();
             placeholders.put("damage", String.valueOf(packet.getValue()));
@@ -78,6 +79,9 @@ public class PlayerAttack implements Listener {
                 PlayerData victimData = PlayerData.get(player);
                 PlayerStats victimStats = victimData.getStats();
 
+                double defense = victimStats.getStat("DEFENSE");
+                double elemental_resistance = victimStats.getStat("AST_"+Element+"_RESISTANCE");
+
                 placeholders.put("victim-level", String.valueOf(victimData.getLevel()));
                 placeholders.put("victim-critical-rate", String.valueOf(victimStats.getStat("AST_CRITICAL_RATE")));
                 placeholders.put("victim-critical-damage", String.valueOf(victimStats.getStat("AST_CRITICAL_DAMAGE")));
@@ -85,8 +89,8 @@ public class PlayerAttack implements Listener {
                 placeholders.put("victim-attack-buff-percent", String.valueOf(victimStats.getStat("AST_ATTACK_DAMAGE_BUFF_PERCENT")));
                 placeholders.put("victim-elemental-damage-bonus", String.valueOf(victimStats.getStat("AST_"+Element+"_DAMAGE_BONUS")));
                 placeholders.put("victim-all-elemental-damage-bonus", String.valueOf(victimStats.getStat("AST_ALL_ELEMENTAL_DAMAGE_BONUS")));
-                placeholders.put("victim-elemental-resistance", String.valueOf(victimStats.getStat("AST_"+Element+"_RESISTANCE")));
-                placeholders.put("victim-defense", String.valueOf(victimStats.getStat("DEFENSE")));
+                placeholders.put("victim-elemental-resistance", String.valueOf(elemental_resistance - (er != null ? er.getAmount() : 0)));
+                placeholders.put("victim-defense", String.valueOf(defense - (((dr != null ? dr.getAmount() : 0)/100)*defense)));
                 placeholders.put("victim-ignore-defense", String.valueOf(victimStats.getStat("AST_IGNORE_DEFENSE")));
 
                 double finalDamage = FormulaConverter.convert(config.getString("Damage-Calculation.Player-Player.formula"), Objects.requireNonNull(config.getConfigurationSection("Damage-Calculation.Player-Player.variables")), placeholders);
@@ -102,11 +106,17 @@ public class PlayerAttack implements Listener {
                 double VictimDEF = (mythicMob != null) ? mythicMob.getVariables().getFloat("DEFENSE") : 0;
                 double VictimElementalResistance = (mythicMob != null) ? mythicMob.getVariables().getFloat("AST_"+Element+"_RESISTANCE") : 0;
 
+                /*
+                Bukkit.broadcastMessage(ChatColor.RED+""+victim.getUniqueId());
+                Bukkit.broadcastMessage(ChatColor.GREEN+""+VictimDEF);
+                Bukkit.broadcastMessage(ChatColor.GREEN+""+(dr != null ? dr.getAmount() : 0));
+                Bukkit.broadcastMessage(ChatColor.GREEN+""+(VictimDEF - (((dr != null ? dr.getAmount() : 0)/100)*VictimDEF)));
+                 */
 
                 placeholders.put("victim-level", String.valueOf(VictimLevel));
                 placeholders.put("victim-is-mythic-mob", String.valueOf(mythicMob != null));
-                placeholders.put("victim-elemental-resistance", String.valueOf(VictimElementalResistance));
-                placeholders.put("victim-defense", String.valueOf(VictimDEF));
+                placeholders.put("victim-elemental-resistance", String.valueOf(VictimElementalResistance - (er != null ? er.getAmount() : 0)));
+                placeholders.put("victim-defense", String.valueOf(VictimDEF - (((dr != null ? dr.getAmount() : 0)/100)*VictimDEF)));
                 double finalDamage = FormulaConverter.convert(config.getString("Damage-Calculation.Player-Mob.formula"), Objects.requireNonNull(config.getConfigurationSection("Damage-Calculation.Player-Mob.variables")), placeholders);
 
                 //Bukkit.broadcastMessage(String.valueOf(finalDamage));

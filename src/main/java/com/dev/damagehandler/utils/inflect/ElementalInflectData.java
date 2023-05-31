@@ -1,6 +1,8 @@
 package com.dev.damagehandler.utils.inflect;
 
+import com.dev.damagehandler.utils.Utils;
 import io.lumine.mythic.lib.MythicLib;
+import io.lumine.mythic.lib.element.Element;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,9 +22,21 @@ public class ElementalInflectData {
         return mapElementInflect;
     }
 
+    public String getInflectedIcon() {
+        StringBuilder sb = new StringBuilder();
+        for (String elementID : mapElementInflect.keySet()) {
+
+            Element element = MythicLib.plugin.getElements().get(elementID);
+            if (element == null) continue;
+
+            sb.append(Utils.colorize(element.getColor()+element.getLoreIcon()+"&r"));
+        }
+        return sb.toString();
+    }
+
     public void addInflect(String element, long duration) {
         if (MythicLib.plugin.getElements().get(element) == null) return;
-        if (this.mapElementInflect.containsKey(element) && this.mapElementInflect.get(element) < duration) return;
+        if (this.mapElementInflect.containsKey(element) && duration < this.mapElementInflect.get(element)) return;
 
         this.mapElementInflect.put(element, duration);
         if (!entityElementInflect.containsKey(this.uuid)) entityElementInflect.put(this.uuid, this);

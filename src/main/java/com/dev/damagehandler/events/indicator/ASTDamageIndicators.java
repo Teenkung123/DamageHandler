@@ -7,11 +7,7 @@ import io.lumine.mythic.lib.damage.DamageMetadata;
 import io.lumine.mythic.lib.damage.DamagePacket;
 import io.lumine.mythic.lib.damage.DamageType;
 import io.lumine.mythic.lib.element.Element;
-import io.lumine.mythic.lib.listener.option.DamageIndicators;
 import io.lumine.mythic.lib.listener.option.GameIndicators;
-
-import java.util.*;
-
 import io.lumine.mythic.lib.util.CustomFont;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -23,6 +19,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 /**
  * This class just use to override MythicLib idiot damage indicator system,

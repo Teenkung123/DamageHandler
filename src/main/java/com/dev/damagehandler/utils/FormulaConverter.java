@@ -61,23 +61,18 @@ public class FormulaConverter {
         String patternString = "\\$(.*?)\\$";
         Pattern pattern = Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(formula);
-        StringBuilder sb = new StringBuilder(formula);
 
         while (matcher.find()) {
             String variableName = matcher.group(1);
 
             String variableValue = variables.get(variableName);
             if (hasVariable(variableValue)) {
-                String replacement = String.valueOf(b(a(variableValue, variables, placeholders), placeholders));
-                sb.replace(matcher.start(), matcher.end(), replacement);
-                matcher.region(matcher.start(), sb.length());
+                formula = formula.replace(matcher.group(), String.valueOf(b(a(variableValue, variables, placeholders), placeholders)));
             } else {
-                String replacement = String.valueOf(b(variableValue, placeholders));
-                sb.replace(matcher.start(), matcher.end(), replacement);
-                matcher.region(matcher.start(), sb.length());
+                formula = formula.replace(matcher.group(), String.valueOf(b(variableValue, placeholders)));
             }
         }
-        return sb.toString();
+        return formula;
     }
 
 

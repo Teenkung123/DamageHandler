@@ -6,6 +6,10 @@ authors:
   - Teenkung123
   - downYoutube2548
 
+commands:
+  damagehandle:
+    permission: damagehandle.admin
+
 #depend:
 #  - MythicLib
 #  - MythicMobs
