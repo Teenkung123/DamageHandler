@@ -1,8 +1,8 @@
-package com.dev.damagehandler.utils.debuff;
+package com.dev.damagehandler.debuff;
 
 
 import com.dev.damagehandler.DamageHandler;
-import com.dev.damagehandler.utils.debuff.debuffs.DebuffStatus;
+import com.dev.damagehandler.debuff.debuffs.DebuffStatus;
 import org.bukkit.Bukkit;
 
 import java.util.ConcurrentModificationException;

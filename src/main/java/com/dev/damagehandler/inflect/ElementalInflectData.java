@@ -1,4 +1,4 @@
-package com.dev.damagehandler.utils.inflect;
+package com.dev.damagehandler.inflect;
 
 import com.dev.damagehandler.utils.Utils;
 import io.lumine.mythic.lib.MythicLib;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.dev.damagehandler.utils.inflect.ElementalInflect.entityElementInflect;
+import static com.dev.damagehandler.inflect.ElementalInflect.entityElementInflect;
 
 public class ElementalInflectData {
     private final UUID uuid;

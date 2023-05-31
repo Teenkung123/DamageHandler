@@ -1,4 +1,4 @@
-package com.dev.damagehandler.utils.inflect;
+package com.dev.damagehandler.inflect;
 
 import com.dev.damagehandler.DamageHandler;
 import org.bukkit.Bukkit;

@@ -13,9 +13,8 @@ import com.dev.damagehandler.events.deal_damage.PlayerAttack;
 import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
 import com.dev.damagehandler.listener.AttackEventListener;
 import com.dev.damagehandler.utils.ConfigLoader;
-import com.dev.damagehandler.utils.debuff.Debuff;
-import com.dev.damagehandler.utils.inflect.ElementalInflect;
-import com.dev.damagehandler.utils.manager.EntityDataManager;
+import com.dev.damagehandler.debuff.Debuff;
+import com.dev.damagehandler.inflect.ElementalInflect;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -79,14 +78,6 @@ public final class DamageHandler extends JavaPlugin {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mi reload all");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mmocore reload");
 
-        //This will loop every 5 minute to free the memory
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
-            EntityDataManager.getManager().forEach((entity, entityManager) -> {
-                if (entity.isDead()) {
-                    EntityDataManager.removeEntity(entity);
-                }
-            });
-        }, 20, 300);
 
     }
 

@@ -1,4 +1,4 @@
-package com.dev.damagehandler.utils.debuff.debuffs;
+package com.dev.damagehandler.debuff.debuffs;
 
 import java.lang.reflect.Field;
 import java.util.List;

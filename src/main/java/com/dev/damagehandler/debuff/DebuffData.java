@@ -1,11 +1,11 @@
-package com.dev.damagehandler.utils.debuff;
+package com.dev.damagehandler.debuff;
 
-import com.dev.damagehandler.utils.debuff.debuffs.DebuffStatus;
+import com.dev.damagehandler.debuff.debuffs.DebuffStatus;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static com.dev.damagehandler.utils.debuff.Debuff.mapDebuffData;
+import static com.dev.damagehandler.debuff.Debuff.mapDebuffData;
 
 public class DebuffData {
 

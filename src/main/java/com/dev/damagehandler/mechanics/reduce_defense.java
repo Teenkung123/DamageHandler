@@ -1,7 +1,7 @@
 package com.dev.damagehandler.mechanics;
 
 import com.dev.damagehandler.DamageHandler;
-import com.dev.damagehandler.utils.debuff.debuffs.DefenseReduction;
+import com.dev.damagehandler.debuff.debuffs.DefenseReduction;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
