@@ -52,11 +52,8 @@ public class MobAttackEvent extends Event implements Cancellable {
         return this.attack.getTarget();
     }
 
+    @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

@@ -29,7 +29,7 @@ public class ElementalShield extends DebuffStatus {
     public List<DebuffStatus> getCurrentDebuff(List<DebuffStatus> allDebuff) {
         List<DebuffStatus> output = new ArrayList<>();
 
-        // cast List<DebuffStatus> to List<ElementalResistanceReduction>
+        // cast List<DebuffStatus> to List<ElementalShield>
         List<ElementalShield> allElementalRes = new ArrayList<>();
         for (DebuffStatus debuff : allDebuff) {
             if (debuff instanceof ElementalShield) {
@@ -50,7 +50,7 @@ public class ElementalShield extends DebuffStatus {
             }
         }
 
-        // store activate debuff of each element to output arrays
+        // store activate shield of each element to output arrays
         for (String element : separatedElement.keySet()) {
             List<ElementalShield> values = new ArrayList<>(separatedElement.get(element));
             values.sort(Comparator.comparingDouble(ElementalShield::getAmount).thenComparingDouble(ElementalShield::getDuration));

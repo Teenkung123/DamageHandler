@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 /**
  * NOTE: don't dare to read the code of this class
- *
+ * <p>
  * This class is used to evaluate String formula to be calculated the damage
  */
 public class FormulaConverter {
@@ -150,24 +150,12 @@ public class FormulaConverter {
 
                 boolean a = false;
                 switch (operator) {
-                    case ">" -> {
-                        a = arg1 > arg2;
-                    }
-                    case "<" -> {
-                        a = arg1 < arg2;
-                    }
-                    case ">=" -> {
-                        a = arg1 >= arg2;
-                    }
-                    case "<=" -> {
-                        a = arg1 <= arg2;
-                    }
-                    case "=" -> {
-                        a = arg1 == arg2;
-                    }
-                    case "!=" -> {
-                        a = arg1 != arg2;
-                    }
+                    case ">" -> a = arg1 > arg2;
+                    case "<" -> a = arg1 < arg2;
+                    case ">=" -> a = arg1 >= arg2;
+                    case "<=" -> a = arg1 <= arg2;
+                    case "=" -> a = arg1 == arg2;
+                    case "!=" -> a = arg1 != arg2;
                 }
 
                 if (a) {

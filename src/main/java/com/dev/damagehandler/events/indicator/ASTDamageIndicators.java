@@ -41,8 +41,8 @@ public class ASTDamageIndicators extends GameIndicators {
         this.format = config.getString("format");
         this.crit_format = config.getString("crit-format");
         if (config.getBoolean("custom-font.enabled")) {
-            this.font = new CustomFont(config.getConfigurationSection("custom-font.normal"));
-            this.fontCrit = new CustomFont(config.getConfigurationSection("custom-font.crit"));
+            this.font = new CustomFont(Objects.requireNonNull(config.getConfigurationSection("custom-font.normal")));
+            this.fontCrit = new CustomFont(Objects.requireNonNull(config.getConfigurationSection("custom-font.crit")));
         } else {
             this.font = null;
             this.fontCrit = null;

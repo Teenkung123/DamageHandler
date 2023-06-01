@@ -108,13 +108,6 @@ public class PlayerAttack implements Listener {
                 double VictimDEF = (mythicMob != null) ? mythicMob.getVariables().getFloat("DEFENSE") : 0;
                 double VictimElementalResistance = (mythicMob != null) ? mythicMob.getVariables().getFloat("AST_"+Element+"_RESISTANCE") : 0;
 
-                /*
-                Bukkit.broadcastMessage(ChatColor.RED+""+victim.getUniqueId());
-                Bukkit.broadcastMessage(ChatColor.GREEN+""+VictimDEF);
-                Bukkit.broadcastMessage(ChatColor.GREEN+""+(dr != null ? dr.getAmount() : 0));
-                Bukkit.broadcastMessage(ChatColor.GREEN+""+(VictimDEF - (((dr != null ? dr.getAmount() : 0)/100)*VictimDEF)));
-                 */
-
                 placeholders.put("victim-level", String.valueOf(VictimLevel));
                 placeholders.put("victim-is-mythic-mob", String.valueOf(mythicMob != null));
                 placeholders.put("victim-elemental-resistance", String.valueOf(VictimElementalResistance));

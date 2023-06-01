@@ -47,11 +47,8 @@ public class MiscAttackEvent extends Event implements Cancellable {
         return this.event;
     }
 
+    @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }
