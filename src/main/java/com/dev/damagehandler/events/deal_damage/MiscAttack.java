@@ -1,10 +1,10 @@
 package com.dev.damagehandler.events.deal_damage;
 
 import com.dev.damagehandler.DamageHandler;
-import com.dev.damagehandler.listener.events.MiscAttackEvent;
-import com.dev.damagehandler.utils.FormulaConverter;
 import com.dev.damagehandler.debuff.debuffs.DefenseReduction;
 import com.dev.damagehandler.debuff.debuffs.ElementalResistanceReduction;
+import com.dev.damagehandler.listener.events.MiscAttackEvent;
+import com.dev.damagehandler.utils.FormulaConverter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.lib.damage.DamagePacket;

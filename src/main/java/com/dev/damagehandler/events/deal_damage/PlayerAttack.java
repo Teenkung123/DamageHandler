@@ -1,9 +1,9 @@
 package com.dev.damagehandler.events.deal_damage;
 
 import com.dev.damagehandler.DamageHandler;
-import com.dev.damagehandler.utils.FormulaConverter;
 import com.dev.damagehandler.debuff.debuffs.DefenseReduction;
 import com.dev.damagehandler.debuff.debuffs.ElementalResistanceReduction;
+import com.dev.damagehandler.utils.FormulaConverter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.lib.api.event.PlayerAttackEvent;
@@ -11,7 +11,6 @@ import io.lumine.mythic.lib.damage.DamagePacket;
 import io.lumine.mythic.lib.player.PlayerMetadata;
 import net.Indyuce.mmocore.api.player.PlayerData;
 import net.Indyuce.mmocore.api.player.stats.PlayerStats;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,7 +18,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import javax.script.ScriptException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;

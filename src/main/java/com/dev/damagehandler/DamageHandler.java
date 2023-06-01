@@ -1,6 +1,7 @@
 package com.dev.damagehandler;
 
 import com.dev.damagehandler.commands.core;
+import com.dev.damagehandler.debuff.Debuff;
 import com.dev.damagehandler.events.MythicMechanicLoad;
 import com.dev.damagehandler.events.attack_handle.ElementModifier;
 import com.dev.damagehandler.events.attack_handle.InflectElement;
@@ -10,10 +11,9 @@ import com.dev.damagehandler.events.deal_damage.MiscAttack;
 import com.dev.damagehandler.events.deal_damage.MobAttack;
 import com.dev.damagehandler.events.deal_damage.PlayerAttack;
 import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
+import com.dev.damagehandler.inflect.ElementalInflect;
 import com.dev.damagehandler.listener.AttackEventListener;
 import com.dev.damagehandler.utils.ConfigLoader;
-import com.dev.damagehandler.debuff.Debuff;
-import com.dev.damagehandler.inflect.ElementalInflect;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
