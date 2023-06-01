@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Store the data of Elemental Inflection
+ * of all entities
+ * And count down tick of inflection time
+ */
 public class ElementalInflect {
 
     protected static final Map<UUID, ElementalInflectData> entityElementInflect = new HashMap<>();

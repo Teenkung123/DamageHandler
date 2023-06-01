@@ -10,7 +10,7 @@ public class DefenseReduction extends DebuffStatus {
     private final double amount;
 
     public DefenseReduction(double amount, long duration) {
-        super("defense_reduction", duration);
+        super(duration);
         this.amount = amount;
     }
 

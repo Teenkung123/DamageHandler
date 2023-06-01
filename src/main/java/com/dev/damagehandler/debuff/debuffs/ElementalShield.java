@@ -2,22 +2,27 @@ package com.dev.damagehandler.debuff.debuffs;
 
 import java.util.*;
 
-public class ElementalResistanceReduction extends DebuffStatus {
-    private final double amount;
+public class ElementalShield extends DebuffStatus {
+
+    private double amount;
     private final String element;
 
-    public ElementalResistanceReduction(double amount, long duration, String element) {
+    public ElementalShield(double amount, String element, long duration) {
         super(duration);
         this.amount = amount;
         this.element = element;
+    }
+
+    public String getElement() {
+        return element;
     }
 
     public double getAmount() {
         return amount;
     }
 
-    public String getElement() {
-        return element;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     @Override
@@ -25,21 +30,21 @@ public class ElementalResistanceReduction extends DebuffStatus {
         List<DebuffStatus> output = new ArrayList<>();
 
         // cast List<DebuffStatus> to List<ElementalResistanceReduction>
-        List<ElementalResistanceReduction> allElementalRes = new ArrayList<>();
+        List<ElementalShield> allElementalRes = new ArrayList<>();
         for (DebuffStatus debuff : allDebuff) {
-            if (debuff instanceof ElementalResistanceReduction) {
-                allElementalRes.add((ElementalResistanceReduction) debuff);
+            if (debuff instanceof ElementalShield) {
+                allElementalRes.add((ElementalShield) debuff);
             }
         }
 
         // separate element
-        HashMap<String, List<ElementalResistanceReduction>> separatedElement = new HashMap<>();
-        for (ElementalResistanceReduction elementalRes : allElementalRes) {
+        HashMap<String, List<ElementalShield>> separatedElement = new HashMap<>();
+        for (ElementalShield elementalRes : allElementalRes) {
             if (!separatedElement.containsKey(elementalRes.getElement())) {
-                List<ElementalResistanceReduction> l = List.of(elementalRes);
+                List<ElementalShield> l = List.of(elementalRes);
                 separatedElement.put(elementalRes.getElement(), l);
             } else {
-                List<ElementalResistanceReduction> updatedL = new ArrayList<>(separatedElement.get(elementalRes.getElement()));
+                List<ElementalShield> updatedL = new ArrayList<>(separatedElement.get(elementalRes.getElement()));
                 updatedL.add(elementalRes);
                 separatedElement.put(elementalRes.getElement(), updatedL);
             }
@@ -47,8 +52,8 @@ public class ElementalResistanceReduction extends DebuffStatus {
 
         // store activate debuff of each element to output arrays
         for (String element : separatedElement.keySet()) {
-            List<ElementalResistanceReduction> values = new ArrayList<>(separatedElement.get(element));
-            values.sort(Comparator.comparingDouble(ElementalResistanceReduction::getAmount).thenComparingDouble(ElementalResistanceReduction::getDuration));
+            List<ElementalShield> values = new ArrayList<>(separatedElement.get(element));
+            values.sort(Comparator.comparingDouble(ElementalShield::getAmount).thenComparingDouble(ElementalShield::getDuration));
             Collections.reverse(values);
             output.add(values.get(0));
         }

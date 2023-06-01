@@ -85,6 +85,8 @@ public class MobAttack implements Listener {
                 placeholders.put("attacker-is-mythic-mob", String.valueOf(attackerMythicMob != null));
                 placeholders.put("attacker-elemental-resistance", String.valueOf(AttackerElementalResistance));
                 placeholders.put("attacker-defense", String.valueOf(AttackerDEF));
+                placeholders.put("victim-elemental-resistance-reduction", String.valueOf(er != null ? er.getAmount() : 0));
+                placeholders.put("victim-defense-reduction", String.valueOf(dr != null ? dr.getAmount() : 0));
 
                 // if victim is player
                 if (victim instanceof Player player) {
@@ -102,8 +104,8 @@ public class MobAttack implements Listener {
                     placeholders.put("victim-attack-buff-percent", String.valueOf(victimStats.getStat("AST_ATTACK_DAMAGE_BUFF_PERCENT")));
                     placeholders.put("victim-elemental-damage-bonus", String.valueOf(victimStats.getStat("AST_" + Element + "_DAMAGE_BONUS")));
                     placeholders.put("victim-all-elemental-damage-bonus", String.valueOf(victimStats.getStat("AST_ALL_ELEMENTAL_DAMAGE_BONUS")));
-                    placeholders.put("victim-elemental-resistance", String.valueOf(elemental_resistance - (er != null ? er.getAmount() : 0)));
-                    placeholders.put("victim-defense", String.valueOf(defense - (((dr != null ? dr.getAmount() : 0)/100)*defense)));
+                    placeholders.put("victim-elemental-resistance", String.valueOf(elemental_resistance));
+                    placeholders.put("victim-defense", String.valueOf(defense));
                     placeholders.put("victim-ignore-defense", String.valueOf(victimStats.getStat("AST_IGNORE_DEFENSE")));
 
                     double finalDamage = FormulaConverter.convert(config.getString("Damage-Calculation.Player-Player.formula"), Objects.requireNonNull(config.getConfigurationSection("Damage-Calculation.Player-Player.variables")), placeholders);
@@ -122,8 +124,8 @@ public class MobAttack implements Listener {
 
                     placeholders.put("victim-level", String.valueOf(VictimLevel));
                     placeholders.put("victim-is-mythic-mob", String.valueOf(mythicMob != null));
-                    placeholders.put("victim-elemental-resistance", String.valueOf(VictimElementalResistance - (er != null ? er.getAmount() : 0)));
-                    placeholders.put("victim-defense", String.valueOf(VictimDEF - (((dr != null ? dr.getAmount() : 0)/100)*VictimDEF)));
+                    placeholders.put("victim-elemental-resistance", String.valueOf(VictimElementalResistance));
+                    placeholders.put("victim-defense", String.valueOf(VictimDEF));
                     double finalDamage = FormulaConverter.convert(config.getString("Damage-Calculation.Player-Mob.formula"), Objects.requireNonNull(config.getConfigurationSection("Damage-Calculation.Player-Mob.variables")), placeholders);
 
                     //Bukkit.broadcastMessage(String.valueOf(finalDamage));

@@ -4,15 +4,16 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The class used to specify the details of Debuff.
+ */
 public abstract class DebuffStatus {
     public long duration;
     private final UUID uuid;
-    private final String id;
 
-    protected DebuffStatus(String id, long duration) {
+    public DebuffStatus(long duration) {
         this.duration = duration;
         this.uuid = UUID.randomUUID();
-        this.id = id;
     }
 
     public abstract List<DebuffStatus> getCurrentDebuff(List<DebuffStatus> allDebuff);

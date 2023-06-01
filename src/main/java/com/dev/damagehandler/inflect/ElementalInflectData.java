@@ -10,6 +10,9 @@ import java.util.UUID;
 
 import static com.dev.damagehandler.inflect.ElementalInflect.entityElementInflect;
 
+/**
+ * The data set of specified entity about Elemental Inflection
+ */
 public class ElementalInflectData {
     private final UUID uuid;
     private final Map<String, Long> mapElementInflect;
@@ -22,6 +25,10 @@ public class ElementalInflectData {
         return mapElementInflect;
     }
 
+    /**
+     * Get an inflected element icon
+     * @return String inflected element icon
+     */
     public String getInflectedIcon() {
         StringBuilder sb = new StringBuilder();
         for (String elementID : mapElementInflect.keySet()) {

@@ -88,15 +88,17 @@ Damage-Calculation:
       AttackerElementBonusMulti: '1 + ((#attacker-elemental-damage-bonus# + #attacker-all-elemental-damage-bonus#) / 100)'
       AttackerCritMulti: '1 + (#attacker-critical-damage#/100)'
 
-      VDEFMulti: '1 - (($ADEFIgnoreMulti$ * #victim-defense#) / (#victim-defense# + (5 * #attacker-level#)+500))'
+      VDEFMulti: '1 - (($ADEFIgnoreMulti$ * $VDEF$) / ($VDEF$ + (5 * #attacker-level#)+500))'
       ADEFIgnoreMulti: '1 - (#attacker-ignore-defense# / 100)'
+      VDEF: '#victim-defense# - (#victim-defense-reduction#/100 * #victim-defense#)'
 
       VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
-      VElementalResPercent: '#victim-elemental-resistance#/100'
-      A: '1 - (#victim-elemental-resistance#/2/100)'
+      VElementalResPercent: '$VElementalRes$/100'
+      VElementalRes: '#victim-elemental-resistance# - (#victim-elemental-resistance-reduction#/100 * #victim-elemental-resistance#)'
+      A: '1 - ($VElementalRes$/2/100)'
       B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
-      C: '1 - (#victim-elemental-resistance#/100)'
-      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+      C: '1 - ($VElementalRes$/100)'
+      D: '1/((4 * $VElementalRes$/100)+1)'
 
   Player-Mob:
     formula: '$ATotalDamage$ * $VDEFMulti$ * $VElementalRESMulti$'
@@ -108,70 +110,80 @@ Damage-Calculation:
       AttackerElementBonusMulti: '1 + ((#attacker-elemental-damage-bonus# + #attacker-all-elemental-damage-bonus#) / 100)'
       AttackerCritMulti: '1 + (#attacker-critical-damage#/100)'
 
-      VDEFMulti: '1 - (($ADEFIgnoreMulti$ * #victim-defense#) / (#victim-defense# + (5 * #attacker-level#)+500))'
+      VDEFMulti: '1 - (($ADEFIgnoreMulti$ * $VDEF$) / ($VDEF$ + (5 * #attacker-level#)+500))'
+      VDEF: '#victim-defense# - (#victim-defense-reduction#/100 * #victim-defense#)'
       ADEFIgnoreMulti: '1 - (#attacker-ignore-defense# / 100)'
 
       VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
-      VElementalResPercent: '$VElementalRES$/100'
-      VElementalRES: 'if(#victim-is-mythic-mob#,#victim-elemental-resistance#,0)'
-      A: '1 - (#victim-elemental-resistance#/2/100)'
+      VElementalResPercent: '$VElementalRes2$/100'
+      VElementalRes2: 'if(#victim-is-mythic-mob#,$VElementalRes1$,0)'
+      VElementalRes1: '#victim-elemental-resistance# - (#victim-elemental-resistance-reduction#/100 * #victim-elemental-resistance#)'
+      A: '1 - ($VElementalRes2$/2/100)'
       B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
-      C: '1 - (#victim-elemental-resistance#/100)'
-      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+      C: '1 - ($VElementalRes2$/100)'
+      D: '1/((4 * $VElementalRes2$/100)+1)'
 
   Mob-Player:
     formula: '#damage# * $VDEFMulti$ * $VElementalRESMulti$'
     variables:
-      VDEFMulti: '1 - (#victim-defense# / (#victim-defense# + (5 * $ALevel$) + 500))'
+      VDEFMulti: '1 - ($VDEF$ / ($VDEF$ + (5 * $ALevel$) + 500))'
+      VDEF: '#victim-defense# - (#victim-defense-reduction#/100 * #victim-defense#)'
       ALevel: 'if(#attacker-is-mythic-mob#,#attacker-level#,1)'
 
       VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
-      VElementalResPercent: '#victim-elemental-resistance#/100'
-      A: '1 - (#victim-elemental-resistance#/2/100)'
+      VElementalResPercent: '$VElementalRes$/100'
+      VElementalRes: '#victim-elemental-resistance# - (#victim-elemental-resistance-reduction#/100 * #victim-elemental-resistance#)'
+      A: '1 - ($VElementalRes$/2/100)'
       B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
-      C: '1 - (#victim-elemental-resistance#/100)'
-      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+      C: '1 - ($VElementalRes$/100)'
+      D: '1/((4 * $VElementalRes$/100)+1)'
 
   Mob-Mob:
     formula: '#damage# * $VDEFMulti$ * $VElementalRESMulti$'
     variables:
-      VDEFMulti: '1 - (#victim-defense# / (#victim-defense# + (5 * $ALevel$) + 500))'
+      VDEFMulti: '1 - ($VDEF$ / ($VDEF$ + (5 * $ALevel$) + 500))'
+      VDEF: '#victim-defense# - (#victim-defense-reduction#/100 * #victim-defense#)'
       ALevel: 'if(#attacker-is-mythic-mob#,#attacker-level#,1)'
 
       VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
-      VElementalResPercent: '$VElementalRES$/100'
-      VElementalRES: 'if(#victim-is-mythic-mob#,#victim-elemental-resistance#,0)'
-      A: '1 - (#victim-elemental-resistance#/2/100)'
+      VElementalResPercent: '$VElementalRes2$/100'
+      VElementalRes2: 'if(#victim-is-mythic-mob#,$VElementalRes1$,0)'
+      VElementalRes1: '#victim-elemental-resistance# - (#victim-elemental-resistance-reduction#/100 * #victim-elemental-resistance#)'
+      A: '1 - ($VElementalRes2$/2/100)'
       B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
-      C: '1 - (#victim-elemental-resistance#/100)'
-      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+      C: '1 - ($VElementalRes2$/100)'
+      D: '1/((4 * $VElementalRes2$/100)+1)'
 
   Misc-Player:
     formula: '#damage# * $VDEFMulti$ * $VElementalRESMulti$'
     variables:
 
-      VDEFMulti: '1 - (VictimDEF / (VictimDEF + 5 + 500))'
+      VDEFMulti: '1 - ($VDEF$ / ($VDEF$ + 5 + 500))'
+      VDEF: '#victim-defense# - (#victim-defense-reduction#/100 * #victim-defense#)'
 
       VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
-      VElementalResPercent: '#victim-elemental-resistance#/100'
-      A: '1 - (#victim-elemental-resistance#/2/100)'
+      VElementalResPercent: '$VElementalRes$/100'
+      VElementalRes: '#victim-elemental-resistance# - (#victim-elemental-resistance-reduction#/100 * #victim-elemental-resistance#)'
+      A: '1 - ($VElementalRes$/2/100)'
       B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
-      C: '1 - (#victim-elemental-resistance#/100)'
-      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+      C: '1 - ($VElementalRes$/100)'
+      D: '1/((4 * $VElementalRes$/100)+1)'
 
   Misc-Mob:
     formula: '#damage# * $VDEFMulti$ * $VElementalRESMulti$'
     variables:
 
-      VDEFMulti: '1 - (VictimDEF / (VictimDEF + 5 + 500))'
+      VDEFMulti: '1 - ($VDEF$ / ($VDEF$ + 5 + 500))'
+      VDEF: '#victim-defense# - (#victim-defense-reduction#/100 * #victim-defense#)'
 
       VElementalRESMulti: 'if($VElementalResPercent$ < 0,$A$,$B$)'
-      VElementalResPercent: '$VElementalRES$/100'
-      VElementalRES: 'if(#victim-is-mythic-mob#,#victim-elemental-resistance#,0)'
-      A: '1 - (#victim-elemental-resistance#/2/100)'
+      VElementalResPercent: '$VElementalRes2$/100'
+      VElementalRes2: 'if(#victim-is-mythic-mob#,$VElementalRes1$,0)'
+      VElementalRes1: '#victim-elemental-resistance# - (#victim-elemental-resistance-reduction#/100 * #victim-elemental-resistance#)'
+      A: '1 - ($VElementalRes2$/2/100)'
       B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
-      C: '1 - (#victim-elemental-resistance#/100)'
-      D: '1/((4 * #victim-elemental-resistance#/100)+1)'
+      C: '1 - ($VElementalRes2$/100)'
+      D: '1/((4 * $VElementalRes2$/100)+1)'
 
 Elements:
   PHYSICAL:

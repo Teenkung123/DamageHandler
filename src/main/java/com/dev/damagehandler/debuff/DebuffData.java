@@ -7,6 +7,9 @@ import java.util.*;
 
 import static com.dev.damagehandler.debuff.Debuff.mapDebuffData;
 
+/**
+ * The data set of specified entity about Debuff
+ */
 public class DebuffData {
 
     private final UUID uuid;

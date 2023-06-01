@@ -26,7 +26,7 @@ import org.bukkit.entity.Player;
 import java.util.Objects;
 
 //This class will register the ElementDamage Skill to MythicMobs
-public class damage_element implements ITargetedEntitySkill {
+public class elemental_damage implements ITargetedEntitySkill {
     private final String element;
     private final PlaceholderDouble amount;
 
@@ -36,7 +36,7 @@ public class damage_element implements ITargetedEntitySkill {
      *
      * @param config The config of the skill.
      */
-    public damage_element(MythicLineConfig config) {
+    public elemental_damage(MythicLineConfig config) {
         amount = config.getPlaceholderDouble(new String[] {"amount", "a"}, 0);
         element = config.getString(new String[] {"element"});
     }

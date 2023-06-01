@@ -1,12 +1,11 @@
 package com.dev.damagehandler;
 
 import com.dev.damagehandler.commands.core;
-import com.dev.damagehandler.events.EntityDeath;
-import com.dev.damagehandler.events.JoinEvent;
 import com.dev.damagehandler.events.MythicMechanicLoad;
 import com.dev.damagehandler.events.attack_handle.ElementModifier;
 import com.dev.damagehandler.events.attack_handle.InflectElement;
 import com.dev.damagehandler.events.attack_handle.RemoveVanillaDamage;
+import com.dev.damagehandler.events.attack_handle.ShieldRefutation;
 import com.dev.damagehandler.events.deal_damage.MiscAttack;
 import com.dev.damagehandler.events.deal_damage.MobAttack;
 import com.dev.damagehandler.events.deal_damage.PlayerAttack;
@@ -36,8 +35,8 @@ public final class DamageHandler extends JavaPlugin {
 
     // TODO: เลียงตามลำดับ
     //  1. Level Difference Multiplier (waiting for DJKlaKung)
-    //  2. Elemental Inflection
-    //  3. Resistance Reduction & Defense Reduction
+    //  2. Elemental Inflection (Done)
+    //  3. Resistance Reduction & Defense Reduction (Done)
     //  4. Entity Elemental Inflection Status
     //  5. Elemental Reaction
     //  6. Configurable Damage Equation (Done)
@@ -67,12 +66,11 @@ public final class DamageHandler extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MobAttack(), this);
         Bukkit.getPluginManager().registerEvents(new MiscAttack(), this);
         Bukkit.getPluginManager().registerEvents(new ElementModifier(), this);
-        Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
-        Bukkit.getPluginManager().registerEvents(new EntityDeath(), this);
         Bukkit.getPluginManager().registerEvents(new AttackEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new ASTDamageIndicators(getConfig().getConfigurationSection("Indicators")), this);
         Bukkit.getPluginManager().registerEvents(new RemoveVanillaDamage(), this);
         Bukkit.getPluginManager().registerEvents(new InflectElement(), this);
+        Bukkit.getPluginManager().registerEvents(new ShieldRefutation(), this);
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm reload");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mi reload all");

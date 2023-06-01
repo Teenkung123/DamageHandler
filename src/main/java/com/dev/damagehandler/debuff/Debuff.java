@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Store the data of Debuffs of all entities
+ * And count down tick of debuff time
+ */
 public class Debuff {
     public static final Map<UUID, DebuffData> mapDebuffData = new HashMap<>();
 
