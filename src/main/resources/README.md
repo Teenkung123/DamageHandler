@@ -67,6 +67,5 @@ Examples:
 ```yml
 test:
   Skills:
-  - reduce_defense{amount=50;element=ANEMO;duration=100} @Target # reduce 50% of anemo resistance
+  - reduce_resistance{amount=50;element=ANEMO;duration=100} @Target # reduce 50% of anemo resistance
 ```
-
