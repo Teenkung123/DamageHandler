@@ -17,6 +17,7 @@ public class ConfigLoader {
     private static Long inflectTime;
     private static String defaultElement;
     private static Map<String, String> elementalModifier = new HashMap<>();
+    private static List<String> inflectWhitelist;
 
     private static final HashMap<String, DoubleStatRegister> doubleStats = new HashMap<>();
     private static final HashMap<String, BooleanStatRegister> booleanStats = new HashMap<>();
@@ -26,6 +27,7 @@ public class ConfigLoader {
 
         inflectTime = config.getLong("General.Inflect-Time", 200);
         defaultElement = config.getString("General.Default-Element");
+        inflectWhitelist = config.getStringList("General.inflect-whitelist");
 
         for (String damageCause : Objects.requireNonNull(config.getConfigurationSection("Elemental-Modifier")).getKeys(false)) {
             elementalModifier.put(damageCause, config.getString("Elemental-Modifier."+damageCause));
@@ -48,7 +50,7 @@ public class ConfigLoader {
         return defaultElement;
     }
     public static Map<String, String> getElementalModifier() { return elementalModifier; }
-
+    public static List<String> getInflectWhitelist() { return inflectWhitelist; }
     private static void registerBooleanStats(ConfigurationSection stats) {
         if (stats != null) {
             for (String stat : stats.getKeys(false)) {

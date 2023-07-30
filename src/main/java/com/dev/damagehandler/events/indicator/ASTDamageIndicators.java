@@ -64,7 +64,7 @@ public class ASTDamageIndicators extends GameIndicators {
             Map<IndicatorType, Double> mappedDamage = this.mapDamage(event.getDamage());
             mappedDamage.forEach((type, val) -> {
                 if (!(val < 0.02)) {
-                    holos.add(type.computeFormat(val));
+                    holos.add(computeFormat(val, type.crit, (type.crit) ? crit_format : format, type.element));
                 }
             });
             if (this.splitHolograms) {
@@ -79,7 +79,7 @@ public class ASTDamageIndicators extends GameIndicators {
         }
     }
 
-    private @NotNull Vector getDirection(EntityDamageEvent event) {
+    public @NotNull Vector getDirection(EntityDamageEvent event) {
         if (event instanceof EntityDamageByEntityEvent) {
             Vector dir = event.getEntity().getLocation().toVector().subtract(((EntityDamageByEntityEvent)event).getDamager().getLocation().toVector()).setY(0);
             if (dir.lengthSquared() > 0.0) {
@@ -104,7 +104,7 @@ public class ASTDamageIndicators extends GameIndicators {
         return mapped;
     }
 
-    private class IndicatorType {
+    public class IndicatorType {
         final boolean physical;
         final @Nullable Element element;
         final boolean crit;
@@ -135,13 +135,6 @@ public class ASTDamageIndicators extends GameIndicators {
             this.crit = var10001;
         }
 
-        @NotNull
-        private String computeFormat(double damage) {
-            CustomFont indicatorFont = this.crit && ASTDamageIndicators.this.fontCrit != null ? ASTDamageIndicators.this.fontCrit : ASTDamageIndicators.this.font;
-            String formattedDamage = indicatorFont == null ? ASTDamageIndicators.this.formatNumber(damage) : indicatorFont.format(ASTDamageIndicators.this.formatNumber(damage));
-            return (this.crit) ? MythicLib.plugin.getPlaceholderParser().parse(null, ASTDamageIndicators.this.crit_format.replace("{color}", (this.element != null) ? this.element.getColor() : "").replace("{icon}", (this.element != null) ? this.element.getLoreIcon() : "").replace("{value}", formattedDamage)) : MythicLib.plugin.getPlaceholderParser().parse(null, ASTDamageIndicators.this.format.replace("{color}", (this.element != null) ? this.element.getColor() : "").replace("{icon}", (this.element != null) ? this.element.getLoreIcon() : "").replace("{value}", formattedDamage));
-        }
-
         public boolean equals(Object o) {
             if (this == o) {
                 return true;
@@ -156,5 +149,12 @@ public class ASTDamageIndicators extends GameIndicators {
         public int hashCode() {
             return Objects.hash(this.physical, this.element);
         }
+    }
+
+    @NotNull
+    public String computeFormat(double damage, boolean crit, String format, Element element) {
+        CustomFont indicatorFont = (crit && ASTDamageIndicators.this.fontCrit != null) ? ASTDamageIndicators.this.fontCrit : ASTDamageIndicators.this.font;
+        String formattedDamage = indicatorFont == null ? ASTDamageIndicators.this.formatNumber(damage) : indicatorFont.format(ASTDamageIndicators.this.formatNumber(damage));
+        return MythicLib.plugin.getPlaceholderParser().parse(null, format.replace("{color}", (element != null) ? element.getColor() : "").replace("{icon}", (element != null) ? element.getLoreIcon() : "").replace("{value}", formattedDamage));
     }
 }

@@ -2,6 +2,11 @@ General:
   Inflect-Time: 200
   Default-Element: PHYSICAL
   disable-vanilla-damage: true
+  inflect-whitelist:
+    - PYRO
+    - CRYO
+    - ELECTRO
+    - HYDRO
 
 Elemental-Modifier:
   # <Damage Cause>: <Element>
@@ -11,12 +16,15 @@ Elemental-Modifier:
   LAVA: PYRO
   FREEZE: CRYO
 
+
+
 # don't forget to disable damage-indicator in MythicLib config.yml if you enable this
 Indicators:
   enable: true
   decimal-format: '0.0'
   format: '{color}{icon} {value}'
   crit-format: '{color}&l{icon} {value}'
+  shield-attack-format: '&7🛡{icon} -{value}'
   custom-font:
     enabled: false
     normal:
@@ -208,7 +216,7 @@ Reactions:
         Inflect-Skill: []
     Melt:
         Inflect-Skill: []
-    Superconduct:
+    SuperConduct:
         Inflect-Skill: []
     Overload:
         Inflect-Skill: []
@@ -247,11 +255,6 @@ Stats:
       Icon:
         Name: "%element% Resistance (%)"
         Lore: [ '&7Resistance to %element% damage' ]
-  #  ELEMENTAL_RESISTANCE_REDUCTION:
-  #    Name: Elemental Resistance Reduction
-  #    Icon:
-  #      Name: "%element% Resistance Reduction (%)"
-  #      Lore: [ '&7Reduce Resistance from %element% damage' ]
     AST_ELEMENTAL_DAMAGE_BONUS:
       Name: Elemental Damage Bonus
       Icon:
@@ -264,12 +267,6 @@ Stats:
         Name: Elemental Resistance (%)
         Material: NETHER_STAR
         Lore: ['&7Resistance to all elemental damage']
-  #  ALL_ELEMENTAL_RESISTANCE_REDUCTION:
-  #    Name: Elemental Resistance Reduction
-  #    Icon:
-  #      Name: Elemental Resistance Reduction (%)
-  #      Material: NETHER_STAR
-  #      Lore: [ '&7Reduce Resistance from all elemental damage' ]
     AST_ALL_ELEMENTAL_DAMAGE_BONUS:
       Name: Elemental Damage Bonus
       Icon:
@@ -292,12 +289,6 @@ Stats:
         Name: Ignore Defense (%)
         Material: NETHERITE_AXE
         Lore: ['&7Reduce all defense']
-  #  DEFENSE_REDUCTION:
-  #    Name: Defense Reduction
-  #    Icon:
-  #      Name: Defense Reduction (%)
-  #      Material: NETHERITE_AXE
-  #      Lore: [ '&7Reduce all defense' ]
 
 
 

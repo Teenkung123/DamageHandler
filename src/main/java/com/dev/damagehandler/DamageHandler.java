@@ -3,19 +3,21 @@ package com.dev.damagehandler;
 import com.dev.damagehandler.commands.core;
 import com.dev.damagehandler.debuff.Debuff;
 import com.dev.damagehandler.events.MythicMechanicLoad;
-import com.dev.damagehandler.events.attack_handle.ElementModifier;
-import com.dev.damagehandler.events.attack_handle.InflectElement;
-import com.dev.damagehandler.events.attack_handle.RemoveVanillaDamage;
-import com.dev.damagehandler.events.attack_handle.ShieldRefutation;
+import com.dev.damagehandler.events.attack_handle.*;
+import com.dev.damagehandler.events.attack_handle.attack_priority.Attack;
+import com.dev.damagehandler.events.attack_handle.attack_priority.InflectElement;
+import com.dev.damagehandler.events.attack_handle.attack_priority.ShieldRefutation;
 import com.dev.damagehandler.events.deal_damage.MiscAttack;
 import com.dev.damagehandler.events.deal_damage.MobAttack;
 import com.dev.damagehandler.events.deal_damage.PlayerAttack;
 import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
 import com.dev.damagehandler.inflect.ElementalInflect;
+import com.dev.damagehandler.inflect.InflectVisualizer;
 import com.dev.damagehandler.listener.AttackEventListener;
 import com.dev.damagehandler.utils.ConfigLoader;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,7 +32,7 @@ public final class DamageHandler extends JavaPlugin {
     /**
      * API Docs:
      * ExpressionBuilder:
-     * https://www.objecthunter.net/exp4j/apidocs/index.html
+     * <a href="https://www.objecthunter.net/exp4j/apidocs/index.html">...</a>
      */
 
     // TODO: เลียงตามลำดับ
@@ -45,18 +47,21 @@ public final class DamageHandler extends JavaPlugin {
     private static DamageHandler instance;
     private static ElementalInflect elementalInflect;
     private static Debuff debuff;
+    private static Attack attack;
 
     @Override
     public void onEnable() {
         instance = this;
         elementalInflect = new ElementalInflect();
         debuff = new Debuff();
+        attack = new Attack();
         loadResource(this, "config.yml");
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         ConfigLoader.loadConfig();
         ElementalInflect.startTick();
         Debuff.startTick();
+        InflectVisualizer.start();
 
         Objects.requireNonNull(Bukkit.getPluginCommand("damagehandle")).setExecutor(new core());
 
@@ -69,8 +74,10 @@ public final class DamageHandler extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AttackEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new ASTDamageIndicators(getConfig().getConfigurationSection("Indicators")), this);
         Bukkit.getPluginManager().registerEvents(new RemoveVanillaDamage(), this);
-        Bukkit.getPluginManager().registerEvents(new InflectElement(), this);
-        Bukkit.getPluginManager().registerEvents(new ShieldRefutation(), this);
+        Bukkit.getPluginManager().registerEvents(getAttack(), this);
+
+        getAttack().registerAttackEvent(new InflectElement());
+        getAttack().registerAttackEvent(new ShieldRefutation());
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm reload");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mi reload all");
@@ -79,11 +86,19 @@ public final class DamageHandler extends JavaPlugin {
 
     }
 
+    @Override
+    public void onDisable() {
+        for (TextDisplay textDisplay : InflectVisualizer.mapHologram.values()) {
+            textDisplay.remove();
+        }
+    }
+
     public static DamageHandler getInstance() {
         return instance;
     }
     public static ElementalInflect getElementalInflect() { return elementalInflect; }
     public static Debuff getDebuff() { return debuff; }
+    public static Attack getAttack() { return attack; }
 
     //What the hell is this?
     private static File loadResource(Plugin plugin, String resource) {
@@ -99,7 +114,7 @@ public final class DamageHandler extends JavaPlugin {
                 ByteStreams.copy(in, out);
             }
             //}
-        } catch (Exception e) { e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return resourceFile;

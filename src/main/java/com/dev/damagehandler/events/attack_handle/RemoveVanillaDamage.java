@@ -6,6 +6,7 @@ import io.lumine.mythic.lib.api.event.AttackEvent;
 import io.lumine.mythic.lib.api.event.DamageCheckEvent;
 import io.lumine.mythic.lib.api.event.PlayerAttackEvent;
 import io.lumine.mythic.lib.damage.AttackMetadata;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -17,10 +18,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
  * This class use to remove vanilla damage calculation after DamageHandler deal damage
  * (e.g. Armor, Armor Toughness of Victim)
  */
-public class RemoveVanillaDamage implements Listener {
+public class RemoveVanillaDamage implements Listener{
 
     @EventHandler(
-            priority = EventPriority.HIGH,
+            priority = EventPriority.HIGHEST,
             ignoreCancelled = true
     )
     public void onDamage(EntityDamageEvent event) {
