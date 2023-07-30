@@ -2,7 +2,7 @@
 
 ## Commands
 
-- `/damagehandle reload` reload plugin config
+- `/damagehandle reload` reload plugin configuration
 
 ## MythicMobs Mechanics
 
