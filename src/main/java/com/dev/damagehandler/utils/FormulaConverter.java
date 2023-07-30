@@ -19,18 +19,6 @@ import java.util.regex.Pattern;
 public class FormulaConverter {
 
     /**
-     * Calculate the value obtained from the given formula
-     *
-     * @param formula String formula input
-     * @param variables variables
-     * @param placeholders built-in placeholders
-     * @return the calculated value
-     */
-    public static double convert(String formula, Map<String, String> variables, Map<String, String> placeholders) {
-        return b(a(formula, variables, placeholders), placeholders);
-    }
-
-    /**
      * Calculate the value obtained from the given equation
      *
      * @param formula String formula input

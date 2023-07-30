@@ -104,7 +104,7 @@ public class ASTDamageIndicators extends GameIndicators {
         return mapped;
     }
 
-    public class IndicatorType {
+    public static class IndicatorType {
         final boolean physical;
         final @Nullable Element element;
         final boolean crit;
