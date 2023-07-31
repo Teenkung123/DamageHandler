@@ -70,7 +70,7 @@ public class PlayerAttack implements Listener {
             placeholders.put("attacker-all-elemental-damage-bonus", String.valueOf(attackerStats.getStat("AST_ALL_ELEMENTAL_DAMAGE_BONUS")));
             placeholders.put("attacker-elemental-resistance", String.valueOf(attackerStats.getStat("AST_"+Element+"_RESISTANCE")));
             placeholders.put("attacker-defense", String.valueOf(attackerStats.getStat("DEFENSE")));
-            placeholders.put("attacker-ignore-defense", String.valueOf(attackerStats.getStat("AST_IGNORE_DEFENSE")));
+            placeholders.put("attacker-ignore-defense", String.valueOf(Math.min(attackerStats.getStat("AST_IGNORE_DEFENSE"), 100)));
             placeholders.put("victim-elemental-resistance-reduction", String.valueOf(er != null ? er.getAmount() : 0));
             placeholders.put("victim-defense-reduction", String.valueOf(dr != null ? dr.getAmount() : 0));
 
@@ -93,7 +93,7 @@ public class PlayerAttack implements Listener {
                 placeholders.put("victim-all-elemental-damage-bonus", String.valueOf(victimStats.getStat("AST_ALL_ELEMENTAL_DAMAGE_BONUS")));
                 placeholders.put("victim-elemental-resistance", String.valueOf(elemental_resistance ));
                 placeholders.put("victim-defense", String.valueOf(defense ));
-                placeholders.put("victim-ignore-defense", String.valueOf(victimStats.getStat("AST_IGNORE_DEFENSE")));
+                placeholders.put("victim-ignore-defense", String.valueOf(Math.min(victimStats.getStat("AST_IGNORE_DEFENSE"), 100)));
 
                 double finalDamage = FormulaConverter.convert(config.getString("Damage-Calculation.Player-Player.formula"), Objects.requireNonNull(config.getConfigurationSection("Damage-Calculation.Player-Player.variables")), placeholders);
                 packet.setValue(finalDamage);

@@ -25,9 +25,11 @@ public class Attack implements Listener {
         List<Method> methods = new ArrayList<>();
 
         for (Object listener : listeners) {
-            methods.addAll(List.of(listener.getClass().getDeclaredMethods()));
             for (Method method : listener.getClass().getDeclaredMethods()) {
-                mapEventHandlers.put(method, listener);
+                if (method.isAnnotationPresent(AttackHandle.class)) {
+                    methods.add(method);
+                    mapEventHandlers.put(method, listener);
+                }
             }
         }
 

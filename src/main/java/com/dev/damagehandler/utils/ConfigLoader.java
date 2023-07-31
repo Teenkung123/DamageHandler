@@ -25,8 +25,8 @@ public class ConfigLoader {
     public static void loadConfig() {
         FileConfiguration config = DamageHandler.getInstance().getConfig();
 
-        inflectTime = config.getLong("General.Inflect-Time", 200);
-        defaultElement = config.getString("General.Default-Element");
+        inflectTime = config.getLong("General.inflect-duration-per-unit", 200);
+        defaultElement = config.getString("General.default-element");
         inflectWhitelist = config.getStringList("General.inflect-whitelist");
 
         for (String damageCause : Objects.requireNonNull(config.getConfigurationSection("Elemental-Modifier")).getKeys(false)) {
@@ -41,6 +41,14 @@ public class ConfigLoader {
     public static void reloadConfig() {
         DamageHandler.getInstance().reloadConfig();
         loadConfig();
+    }
+
+    public static String getAuraElement(String reaction_id) {
+        return DamageHandler.getInstance().getConfig().getString("Elemental-Reaction."+reaction_id+".aura-element");
+    }
+
+    public static String getTriggerElement(String reaction_id) {
+        return DamageHandler.getInstance().getConfig().getString("Elemental-Reaction."+reaction_id+".trigger-element");
     }
 
     public static Long getInflectTime() {
@@ -109,10 +117,5 @@ public class ConfigLoader {
                 }
             }
         }
-    }
-
-
-    private static void registerElementSkill(ConfigurationSection section) {
-
     }
 }

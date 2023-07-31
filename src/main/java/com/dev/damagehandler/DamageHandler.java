@@ -4,6 +4,7 @@ import com.dev.damagehandler.commands.core;
 import com.dev.damagehandler.debuff.Debuff;
 import com.dev.damagehandler.events.MythicMechanicLoad;
 import com.dev.damagehandler.events.attack_handle.*;
+import com.dev.damagehandler.events.attack_handle.attack_priority.TriggerReaction;
 import com.dev.damagehandler.events.attack_handle.attack_priority.Attack;
 import com.dev.damagehandler.events.attack_handle.attack_priority.InflectElement;
 import com.dev.damagehandler.events.attack_handle.attack_priority.ShieldRefutation;
@@ -14,6 +15,9 @@ import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
 import com.dev.damagehandler.inflect.ElementalInflect;
 import com.dev.damagehandler.inflect.InflectVisualizer;
 import com.dev.damagehandler.listener.AttackEventListener;
+import com.dev.damagehandler.reaction.ReactionManager;
+import com.dev.damagehandler.reaction.reactions.Overloaded;
+import com.dev.damagehandler.reaction.reactions.ReverseOverloaded;
 import com.dev.damagehandler.utils.ConfigLoader;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
@@ -48,6 +52,7 @@ public final class DamageHandler extends JavaPlugin {
     private static ElementalInflect elementalInflect;
     private static Debuff debuff;
     private static Attack attack;
+    private static ReactionManager reactionManager;
 
     @Override
     public void onEnable() {
@@ -55,6 +60,7 @@ public final class DamageHandler extends JavaPlugin {
         elementalInflect = new ElementalInflect();
         debuff = new Debuff();
         attack = new Attack();
+        reactionManager = new ReactionManager();
         loadResource(this, "config.yml");
         getConfig().options().copyDefaults();
         saveDefaultConfig();
@@ -72,12 +78,17 @@ public final class DamageHandler extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MiscAttack(), this);
         Bukkit.getPluginManager().registerEvents(new ElementModifier(), this);
         Bukkit.getPluginManager().registerEvents(new AttackEventListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CancelFireTick(), this);
         Bukkit.getPluginManager().registerEvents(new ASTDamageIndicators(getConfig().getConfigurationSection("Indicators")), this);
         Bukkit.getPluginManager().registerEvents(new RemoveVanillaDamage(), this);
         Bukkit.getPluginManager().registerEvents(getAttack(), this);
 
         getAttack().registerAttackEvent(new InflectElement());
         getAttack().registerAttackEvent(new ShieldRefutation());
+        getAttack().registerAttackEvent(new TriggerReaction());
+
+        getReaction().registerElementalReaction(new Overloaded());
+        getReaction().registerElementalReaction(new ReverseOverloaded());
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm reload");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mi reload all");
@@ -99,6 +110,7 @@ public final class DamageHandler extends JavaPlugin {
     public static ElementalInflect getElementalInflect() { return elementalInflect; }
     public static Debuff getDebuff() { return debuff; }
     public static Attack getAttack() { return attack; }
+    public static ReactionManager getReaction() { return reactionManager; }
 
     //What the hell is this?
     private static File loadResource(Plugin plugin, String resource) {

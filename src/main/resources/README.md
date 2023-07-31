@@ -1,10 +1,18 @@
 # Damage Handler
 
+------------
+
+###### A Minecraft Plugin that modifies Minecraft combat mechanics by handle all types of damage and adding elemental systems and elemental reaction systems into the game's combat system.
+
 ## Commands
+
+---
 
 - `/damagehandle reload` reload plugin configuration
 
 ## MythicMobs Mechanics
+
+---
 
 
 ### elemental_damage
@@ -44,7 +52,7 @@ Reduce defensive power according to the specified quantity and duration
 
 | Attribute | Aliases | Description                             | Default |
 |-----------|---------|-----------------------------------------|---------|
-| amount    | a       | The amount of defense to be reduced     |         | 
+| amount    | a       | The amount of defense to be reduced (%) |         | 
 | duration  |         | The duration for the reduction          |         |
 
 Examples:
@@ -69,3 +77,8 @@ test:
   Skills:
   - reduce_resistance{amount=50;element=ANEMO;duration=100} @Target # reduce 50% of anemo resistance
 ```
+
+## Installations
+
+---
+

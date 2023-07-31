@@ -1,6 +1,6 @@
 General:
-  Inflect-Time: 200
-  Default-Element: PHYSICAL
+  inflect-duration-per-unit: 200
+  default-element: PHYSICAL
   disable-vanilla-damage: true
   inflect-whitelist:
     - PYRO
@@ -16,7 +16,13 @@ Elemental-Modifier:
   LAVA: PYRO
   FREEZE: CRYO
 
-
+Elemental-Reaction:
+  OVERLOADED:
+    aura-element: PYRO
+    trigger-element: ELECTRO
+  REVERSE_OVERLOADED:
+    aura-element: ELECTRO
+    trigger-element: PYRO
 
 # don't forget to disable damage-indicator in MythicLib config.yml if you enable this
 Indicators:
@@ -192,40 +198,6 @@ Damage-Calculation:
       B: 'if($VElementalResPercent$ < 0.75,$C$,$D$)'
       C: '1 - ($VElementalRes2$/100)'
       D: '1/((4 * $VElementalRes2$/100)+1)'
-
-Elements:
-  PHYSICAL:
-    Inflect-Skill: []
-  ANEMO:
-    Inflect-Skill: []
-  GEO:
-    Inflect-Skill: []
-  ELECTRO:
-    Inflect-Skill: []
-  DENDRO:
-    Inflect-Skill: []
-  HYDRO:
-    Inflect-Skill: []
-  PYRO:
-    Inflect-Skill: []
-  CRYO:
-    Inflect-Skill: []
-
-Reactions:
-    Vaporize:
-        Inflect-Skill: []
-    Melt:
-        Inflect-Skill: []
-    SuperConduct:
-        Inflect-Skill: []
-    Overload:
-        Inflect-Skill: []
-    Electro-Charged:
-        Inflect-Skill: []
-    Swirl:
-        Inflect-Skill: []
-    Shatter:
-        Inflect-Skill: []
 
 Stats:
   BOOLEAN_STAT:

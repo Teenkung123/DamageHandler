@@ -66,7 +66,7 @@ public class MiscAttack implements Listener {
                     placeholders.put("victim-all-elemental-damage-bonus", String.valueOf(victimStats.getStat("AST_ALL_ELEMENTAL_DAMAGE_BONUS")));
                     placeholders.put("victim-elemental-resistance", String.valueOf(elemental_resistance));
                     placeholders.put("victim-defense", String.valueOf(defense));
-                    placeholders.put("victim-ignore-defense", String.valueOf(victimStats.getStat("AST_IGNORE_DEFENSE")));
+                    placeholders.put("victim-ignore-defense", String.valueOf(Math.min(victimStats.getStat("AST_IGNORE_DEFENSE"), 100)));
 
                     double finalDamage = FormulaConverter.convert(config.getString("Damage-Calculation.Player-Player.formula"), Objects.requireNonNull(config.getConfigurationSection("Damage-Calculation.Player-Player.variables")), placeholders);
                     packet.setValue(finalDamage);
