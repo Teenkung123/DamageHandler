@@ -4,8 +4,6 @@ import io.lumine.mythic.lib.damage.DamagePacket;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-import java.util.HashMap;
-
 public abstract class ElementalReaction {
 
     private final String id;

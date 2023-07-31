@@ -2,7 +2,6 @@ package com.dev.damagehandler.inflect;
 
 import com.dev.damagehandler.DamageHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;

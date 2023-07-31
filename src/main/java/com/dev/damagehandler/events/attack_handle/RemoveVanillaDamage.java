@@ -6,7 +6,6 @@ import io.lumine.mythic.lib.api.event.AttackEvent;
 import io.lumine.mythic.lib.api.event.DamageCheckEvent;
 import io.lumine.mythic.lib.api.event.PlayerAttackEvent;
 import io.lumine.mythic.lib.damage.AttackMetadata;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;

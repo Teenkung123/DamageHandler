@@ -1,7 +1,9 @@
 package com.dev.damagehandler.events.attack_handle.attack_priority;
 
 import io.lumine.mythic.lib.api.event.AttackEvent;
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
