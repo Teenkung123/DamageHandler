@@ -13,10 +13,11 @@ import org.bukkit.entity.Entity;
 public class reduce_resistance implements ITargetedEntitySkill {
     private final String element;
     private final double amount;
-    private final int duration;
+    private final long duration;
+
     public reduce_resistance(MythicLineConfig config) {
         amount = config.getDouble(new String[] {"amount", "a"}, 0);
-        duration = config.getInteger(new String[] {"duration"});
+        duration = config.getLong(new String[] {"duration"}, 0);
         element = config.getString(new String[] {"element"});
     }
 

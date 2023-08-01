@@ -1,4 +1,4 @@
-package com.dev.damagehandler.inflect;
+package com.dev.damagehandler.aura;
 
 import com.dev.damagehandler.DamageHandler;
 import org.bukkit.Bukkit;
@@ -13,7 +13,7 @@ import org.joml.Vector3f;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class InflectVisualizer {
+public class AuraVisualizer {
 
     public static final HashMap<UUID, TextDisplay> mapHologram = new HashMap<>();
 
@@ -23,14 +23,14 @@ public class InflectVisualizer {
             try {
                 for (UUID uuid : mapHologram.keySet()) {
                     Entity entity = Bukkit.getEntity(uuid);
-                    if (entity == null || entity.isDead() || !ElementalInflect.entityElementInflect.containsKey(uuid)) {
+                    if (entity == null || entity.isDead() || !Aura.entityAura.containsKey(uuid)) {
                         TextDisplay textDisplay = mapHologram.get(uuid);
                         textDisplay.remove();
                         mapHologram.remove(uuid);
                     }
                 }
 
-                for (UUID uuid : ElementalInflect.entityElementInflect.keySet()) {
+                for (UUID uuid : Aura.entityAura.keySet()) {
                     Entity entity = Bukkit.getEntity(uuid);
                     if (entity == null || entity.isDead()) {
                         if (!mapHologram.containsKey(uuid)) continue;
@@ -66,7 +66,7 @@ public class InflectVisualizer {
                     if (!mapHologram.containsKey(uuid)) {
                         TextDisplay textDisplay = entity.getWorld().spawn(spawnLocation, TextDisplay.class);
                         textDisplay.setBillboard(Display.Billboard.CENTER);
-                        textDisplay.setText(DamageHandler.getElementalInflect().getInflect(uuid).getInflectedIcon());
+                        textDisplay.setText(DamageHandler.getAura().getAura(uuid).getAuraIcon());
                         textDisplay.setTransformation(new Transformation(textDisplay.getTransformation().getTranslation(), textDisplay.getTransformation().getLeftRotation(), new Vector3f(scale), textDisplay.getTransformation().getRightRotation()));
                         textDisplay.setShadowed(true);
                         textDisplay.setBrightness(new Display.Brightness(15, 15));
@@ -74,7 +74,7 @@ public class InflectVisualizer {
 
                     } else {
                         TextDisplay textDisplay = mapHologram.get(uuid);
-                        textDisplay.setText(DamageHandler.getElementalInflect().getInflect(uuid).getInflectedIcon());
+                        textDisplay.setText(DamageHandler.getAura().getAura(uuid).getAuraIcon());
                         textDisplay.teleport(spawnLocation);
                     }
                 }

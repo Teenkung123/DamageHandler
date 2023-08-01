@@ -14,10 +14,10 @@ import java.util.*;
 
 public class ConfigLoader {
 
-    private static Long inflectTime;
+    private static Long auraTime;
     private static String defaultElement;
     private static Map<String, String> elementalModifier = new HashMap<>();
-    private static List<String> inflectWhitelist;
+    private static List<String> auraWhitelist;
 
     private static final HashMap<String, DoubleStatRegister> doubleStats = new HashMap<>();
     private static final HashMap<String, BooleanStatRegister> booleanStats = new HashMap<>();
@@ -25,9 +25,9 @@ public class ConfigLoader {
     public static void loadConfig() {
         FileConfiguration config = DamageHandler.getInstance().getConfig();
 
-        inflectTime = config.getLong("General.inflect-duration-per-unit", 200);
+        auraTime = config.getLong("General.aura-duration-per-unit", 200);
         defaultElement = config.getString("General.default-element");
-        inflectWhitelist = config.getStringList("General.inflect-whitelist");
+        auraWhitelist = config.getStringList("General.aura-whitelist");
 
         for (String damageCause : Objects.requireNonNull(config.getConfigurationSection("Elemental-Modifier")).getKeys(false)) {
             elementalModifier.put(damageCause, config.getString("Elemental-Modifier."+damageCause));
@@ -51,14 +51,15 @@ public class ConfigLoader {
         return DamageHandler.getInstance().getConfig().getString("Elemental-Reaction."+reaction_id+".trigger-element");
     }
 
-    public static Long getInflectTime() {
-        return inflectTime;
+    public static Long getAuraTime() {
+        return auraTime;
     }
+    public static Double getDefaultGaugeUnit() { return DamageHandler.getInstance().getConfig().getDouble("General.default-gauge-unit"); }
     public static String getDefaultElement() {
         return defaultElement;
     }
     public static Map<String, String> getElementalModifier() { return elementalModifier; }
-    public static List<String> getInflectWhitelist() { return inflectWhitelist; }
+    public static List<String> getAuraWhitelist() { return auraWhitelist; }
     private static void registerBooleanStats(ConfigurationSection stats) {
         if (stats != null) {
             for (String stat : stats.getKeys(false)) {

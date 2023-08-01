@@ -1,8 +1,10 @@
 General:
-  inflect-duration-per-unit: 200
   default-element: PHYSICAL
   disable-vanilla-damage: true
-  inflect-whitelist:
+
+  aura-duration-per-unit: 200
+  default-gauge-unit: 1
+  aura-whitelist:
     - PYRO
     - CRYO
     - ELECTRO
@@ -20,9 +22,11 @@ Elemental-Reaction:
   OVERLOADED:
     aura-element: PYRO
     trigger-element: ELECTRO
+    gauge-unit-tax: 1.25
   REVERSE_OVERLOADED:
     aura-element: ELECTRO
     trigger-element: PYRO
+    gauge-unit-tax: 1.25
 
 # don't forget to disable damage-indicator in MythicLib config.yml if you enable this
 Indicators:

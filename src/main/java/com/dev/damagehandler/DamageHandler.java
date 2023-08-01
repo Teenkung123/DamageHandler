@@ -1,5 +1,7 @@
 package com.dev.damagehandler;
 
+import com.dev.damagehandler.aura.Aura;
+import com.dev.damagehandler.aura.AuraVisualizer;
 import com.dev.damagehandler.commands.core;
 import com.dev.damagehandler.debuff.Debuff;
 import com.dev.damagehandler.events.MythicMechanicLoad;
@@ -7,15 +9,12 @@ import com.dev.damagehandler.events.attack_handle.CancelFireTick;
 import com.dev.damagehandler.events.attack_handle.ElementModifier;
 import com.dev.damagehandler.events.attack_handle.RemoveVanillaDamage;
 import com.dev.damagehandler.events.attack_handle.attack_priority.Attack;
-import com.dev.damagehandler.events.attack_handle.attack_priority.InflectElement;
 import com.dev.damagehandler.events.attack_handle.attack_priority.ShieldRefutation;
 import com.dev.damagehandler.events.attack_handle.attack_priority.TriggerReaction;
 import com.dev.damagehandler.events.deal_damage.MiscAttack;
 import com.dev.damagehandler.events.deal_damage.MobAttack;
 import com.dev.damagehandler.events.deal_damage.PlayerAttack;
 import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
-import com.dev.damagehandler.inflect.ElementalInflect;
-import com.dev.damagehandler.inflect.InflectVisualizer;
 import com.dev.damagehandler.listener.AttackEventListener;
 import com.dev.damagehandler.reaction.ReactionManager;
 import com.dev.damagehandler.reaction.reactions.Overloaded;
@@ -51,7 +50,7 @@ public final class DamageHandler extends JavaPlugin {
     //  7. More...
 
     private static DamageHandler instance;
-    private static ElementalInflect elementalInflect;
+    private static Aura aura;
     private static Debuff debuff;
     private static Attack attack;
     private static ReactionManager reactionManager;
@@ -59,7 +58,7 @@ public final class DamageHandler extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        elementalInflect = new ElementalInflect();
+        aura = new Aura();
         debuff = new Debuff();
         attack = new Attack();
         reactionManager = new ReactionManager();
@@ -67,9 +66,9 @@ public final class DamageHandler extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         ConfigLoader.loadConfig();
-        ElementalInflect.startTick();
+        Aura.startTick();
         Debuff.startTick();
-        InflectVisualizer.start();
+        AuraVisualizer.start();
 
         Objects.requireNonNull(Bukkit.getPluginCommand("damagehandle")).setExecutor(new core());
 
@@ -85,7 +84,6 @@ public final class DamageHandler extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new RemoveVanillaDamage(), this);
         Bukkit.getPluginManager().registerEvents(getAttack(), this);
 
-        getAttack().registerAttackEvent(new InflectElement());
         getAttack().registerAttackEvent(new ShieldRefutation());
         getAttack().registerAttackEvent(new TriggerReaction());
 
@@ -101,7 +99,7 @@ public final class DamageHandler extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for (TextDisplay textDisplay : InflectVisualizer.mapHologram.values()) {
+        for (TextDisplay textDisplay : AuraVisualizer.mapHologram.values()) {
             textDisplay.remove();
         }
     }
@@ -109,7 +107,7 @@ public final class DamageHandler extends JavaPlugin {
     public static DamageHandler getInstance() {
         return instance;
     }
-    public static ElementalInflect getElementalInflect() { return elementalInflect; }
+    public static Aura getAura() { return aura; }
     public static Debuff getDebuff() { return debuff; }
     public static Attack getAttack() { return attack; }
     public static ReactionManager getReaction() { return reactionManager; }

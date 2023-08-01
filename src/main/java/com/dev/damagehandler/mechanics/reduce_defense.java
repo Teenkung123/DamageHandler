@@ -12,11 +12,11 @@ import org.bukkit.entity.Entity;
 
 public class reduce_defense implements ITargetedEntitySkill {
     private final double amount;
-    private final int duration;
+    private final long duration;
 
     public reduce_defense(MythicLineConfig config) {
         amount = config.getDouble(new String[] {"amount", "a"}, 0);
-        duration = config.getInteger(new String[] {"duration"});
+        duration = config.getLong(new String[] {"duration"}, 0);
     }
 
     @Override

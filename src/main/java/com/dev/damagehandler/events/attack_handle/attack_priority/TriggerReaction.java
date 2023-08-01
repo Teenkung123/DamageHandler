@@ -4,22 +4,30 @@ import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.listener.events.MobAttackEvent;
 import com.dev.damagehandler.reaction.ElementalReaction;
 import com.dev.damagehandler.stats.provider.ASTEntityStatProvider;
+import com.dev.damagehandler.utils.ConfigLoader;
 import io.lumine.mythic.lib.api.event.AttackEvent;
 import io.lumine.mythic.lib.api.event.PlayerAttackEvent;
 import io.lumine.mythic.lib.damage.DamagePacket;
+import io.lumine.mythic.lib.damage.DamageType;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import java.util.Arrays;
+
 public class TriggerReaction {
 
-    @AttackHandle(priority = 3)
+    @AttackHandle(priority = 1)
     public void attack(PlayerAttackEvent event) {
         for (DamagePacket packet : event.getDamage().getPackets()) {
+            if (Arrays.asList(packet.getTypes()).contains(DamageType.SKILL)) continue;
+            if (packet.getElement() == null) continue;
+            if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
+            DamageHandler.getAura().getAura(event.getEntity().getUniqueId()).addAura(packet.getElement().getId(), ConfigLoader.getDefaultGaugeUnit());
             triggerReactions(packet, event.getEntity(), event.getAttack().getPlayer());
         }
     }
 
-    @AttackHandle(priority = 3)
+    @AttackHandle(priority = 1)
     public void attack(AttackEvent a) {
 
         try {
@@ -60,6 +68,10 @@ public class TriggerReaction {
                 }
 
                 for (DamagePacket packet : a.getDamage().getPackets()) {
+                    if (Arrays.asList(packet.getTypes()).contains(DamageType.SKILL)) continue;
+                    if (packet.getElement() == null) continue;
+                    if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
+                    DamageHandler.getAura().getAura(a.getEntity().getUniqueId()).addAura(packet.getElement().getId(), ConfigLoader.getDefaultGaugeUnit());
                     triggerReactions(packet, a.getEntity(), attacker);
                 }
             }
@@ -67,10 +79,10 @@ public class TriggerReaction {
         } catch (NullPointerException ignored) {}
     }
 
-    private void triggerReactions(DamagePacket damage, LivingEntity entity, Entity damager) {
+    public static void triggerReactions(DamagePacket damage, LivingEntity entity, Entity damager) {
         if (damage.getElement() == null) return;
         for (ElementalReaction elementalReaction : DamageHandler.getReaction().getElementalReactions().values()) {
-            if (elementalReaction.getTrigger().equals(damage.getElement().getId()) && DamageHandler.getElementalInflect().getInflect(entity.getUniqueId()).getMapElementInflect().containsKey(elementalReaction.getAura())) {
+            if (elementalReaction.getTrigger().equals(damage.getElement().getId()) && DamageHandler.getAura().getAura(entity.getUniqueId()).getMapAura().containsKey(elementalReaction.getAura())) {
                 elementalReaction.trigger(damage, entity, damager);
             }
         }
