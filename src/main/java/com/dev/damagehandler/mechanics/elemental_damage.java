@@ -4,6 +4,7 @@ import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.events.attack_handle.attack_priority.TriggerReaction;
 import com.dev.damagehandler.stats.provider.ASTEntityStatProvider;
 import com.dev.damagehandler.utils.ConfigLoader;
+import com.dev.damagehandler.utils.Utils;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
@@ -32,7 +33,7 @@ import java.util.Objects;
 public class elemental_damage implements ITargetedEntitySkill {
     private final String element;
     private final PlaceholderDouble amount;
-    private final Double gauge_unit;
+    private final String gauge;
 
     /**
      * This is constructor for the Skill
@@ -43,7 +44,7 @@ public class elemental_damage implements ITargetedEntitySkill {
     public elemental_damage(MythicLineConfig config) {
         amount = config.getPlaceholderDouble(new String[] {"amount", "a"}, 0);
         element = config.getString(new String[] {"element"});
-        gauge_unit = config.getDouble(new String[] {"gauge_unit", "gu"}, 1);
+        gauge = config.getString(new String[] {"gauge_unit", "gu"}, ConfigLoader.getDefaultGauge());
     }
 
     /**
@@ -53,12 +54,14 @@ public class elemental_damage implements ITargetedEntitySkill {
      * @param abstractEntity The entity that was targeted.
      * @return The result of the skill.
      */
-    @SuppressWarnings("deprecation")
     @Override
     public SkillResult castAtEntity(SkillMetadata skillMetadata, AbstractEntity abstractEntity) {
         if (BukkitAdapter.adapt(abstractEntity) != null) {
             Entity bukkittarget = BukkitAdapter.adapt(abstractEntity);
             Entity bukkitcaster = skillMetadata.getCaster().getEntity().getBukkitEntity();
+
+            double gauge_unit = Double.parseDouble(Utils.splitTextAndNumber(gauge)[0]);
+            String decay_rate = Utils.splitTextAndNumber(gauge)[1];
 
             Element element1 = Objects.requireNonNull(Element.valueOf(element), ConfigLoader.getDefaultElement());
             // caster is player
@@ -70,15 +73,15 @@ public class elemental_damage implements ITargetedEntitySkill {
                 DamageMetadata damage = new DamageMetadata(amount.get(skillMetadata), element1, DamageType.SKILL);
                 StatMap statMap = playerData.getMMOPlayerData().getStatMap();
                 PlayerMetadata playerMetadata = new PlayerMetadata(statMap, EquipmentSlot.MAIN_HAND);
-                AttackMetadata attack = new AttackMetadata(damage, playerMetadata);
+                AttackMetadata attack = new AttackMetadata(damage, (LivingEntity) bukkittarget, playerMetadata);
 
-                Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> MythicLib.plugin.getDamage().damage(attack, (LivingEntity) bukkittarget));
+                Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> MythicLib.plugin.getDamage().registerAttack(attack, false, true));
 
                 for (DamagePacket packet : damage.getPackets()) {
                     if (packet.getElement() == null) continue;
                     if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
-                    DamageHandler.getAura().getAura(bukkittarget.getUniqueId()).addAura(packet.getElement().getId(), gauge_unit);
-                    TriggerReaction.triggerReactions(packet, (LivingEntity) bukkittarget, bukkitcaster);
+                    DamageHandler.getAura().getAura(bukkittarget.getUniqueId()).addAura(packet.getElement().getId(), gauge_unit, decay_rate);
+                    TriggerReaction.triggerReactions(packet, gauge_unit, decay_rate, (LivingEntity) bukkittarget, bukkitcaster);
                 }
             }
 
@@ -88,13 +91,13 @@ public class elemental_damage implements ITargetedEntitySkill {
                 DamageMetadata damage = new DamageMetadata(amount.get(skillMetadata), Objects.requireNonNull(Element.valueOf(element), ConfigLoader.getDefaultElement()), DamageType.SKILL);
 
                 AttackMetadata attack = new AttackMetadata(damage, (LivingEntity) bukkittarget, new ASTEntityStatProvider((LivingEntity) bukkitcaster));
-                Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> MythicLib.plugin.getDamage().damage(attack, (LivingEntity) bukkittarget));
+                Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> MythicLib.plugin.getDamage().registerAttack(attack, false, true));
 
                 for (DamagePacket packet : damage.getPackets()) {
                     if (packet.getElement() == null) continue;
                     if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
-                    DamageHandler.getAura().getAura(bukkittarget.getUniqueId()).addAura(packet.getElement().getId(), gauge_unit);
-                    TriggerReaction.triggerReactions(packet, (LivingEntity) bukkittarget, bukkitcaster);
+                    DamageHandler.getAura().getAura(bukkittarget.getUniqueId()).addAura(packet.getElement().getId(), gauge_unit, decay_rate);
+                    TriggerReaction.triggerReactions(packet, gauge_unit, decay_rate, (LivingEntity) bukkittarget, bukkitcaster);
                 }
             }
         }
