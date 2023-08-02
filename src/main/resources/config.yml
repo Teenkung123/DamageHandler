@@ -2,13 +2,46 @@ General:
   default-element: PHYSICAL
   disable-vanilla-damage: true
 
-  aura-duration-per-unit: 200
-  default-gauge-unit: 1
+  decay-rate:
+    A: 200
+    B: 100
+    C: 50
+  default-gauge-unit: 1A
   aura-whitelist:
     - PYRO
     - CRYO
     - ELECTRO
     - HYDRO
+    - DENDRO
+
+Special-Aura:
+  FREEZE:
+    icon: 'F'
+    color: "&b"
+  BURNING:
+    icon: 'B'
+    color: '&6'
+  QUICKEN:
+    icon: 'Q'
+    color: "&a"
+
+Reaction-Priority:
+  PYRO:
+    - "REVERSE_OVERLOADED"
+  ELECTRO:
+    - "OVERLOADED"
+
+Elemental-Reaction:
+  OVERLOADED:
+    display: "&cOverloaded"
+    aura-element: PYRO
+    trigger-element: ELECTRO
+    gauge-unit-tax: 1.25
+  REVERSE_OVERLOADED:
+    display: "&6Reverse Overloaded"
+    aura-element: ELECTRO
+    trigger-element: PYRO
+    gauge-unit-tax: 1.25
 
 Elemental-Modifier:
   # <Damage Cause>: <Element>
@@ -17,16 +50,6 @@ Elemental-Modifier:
   HOT_FLOOR: PYRO
   LAVA: PYRO
   FREEZE: CRYO
-
-Elemental-Reaction:
-  OVERLOADED:
-    aura-element: PYRO
-    trigger-element: ELECTRO
-    gauge-unit-tax: 1.25
-  REVERSE_OVERLOADED:
-    aura-element: ELECTRO
-    trigger-element: PYRO
-    gauge-unit-tax: 1.25
 
 # don't forget to disable damage-indicator in MythicLib config.yml if you enable this
 Indicators:
@@ -66,8 +89,8 @@ Indicators:
   split-holograms: true
   # required Holographic Display
   radial-velocity: -0.3
-  gravity: 0
-  initial-upward-velocity: 0.15
+  gravity: 1
+  initial-upward-velocity: 1.0
   entity-height-percent: 0.5
   y-offset: 0
 
