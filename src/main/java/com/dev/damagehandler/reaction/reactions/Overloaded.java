@@ -1,15 +1,10 @@
 package com.dev.damagehandler.reaction.reactions;
 
-import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.reaction.ElementalReaction;
 import com.dev.damagehandler.utils.ConfigLoader;
 import io.lumine.mythic.lib.damage.DamagePacket;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.scheduler.BukkitTask;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Overloaded extends ElementalReaction {
     public Overloaded() {

@@ -3,9 +3,7 @@ package com.dev.damagehandler.reaction.reactions;
 import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.reaction.ElementalReaction;
 import com.dev.damagehandler.utils.ConfigLoader;
-import com.dev.damagehandler.utils.Utils;
 import io.lumine.mythic.lib.damage.DamagePacket;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
