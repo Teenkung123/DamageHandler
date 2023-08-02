@@ -26,4 +26,9 @@ public class Utils {
         Random random = new Random();
         return random.nextInt(number2 - number1 + 1) + number1;
     }
+
+    public static String[] splitTextAndNumber(String input) {
+        String regex = "(?<=(\\d([.]\\d+)?))(?=[A-Za-z]+)";
+        return input.split(regex);
+    }
 }
