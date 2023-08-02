@@ -19,17 +19,17 @@
 Deal elemental damage or physical damage
 
 
-| Attribute  | Aliases | Data Type | Description           | Default |
-|------------|---------|-----------|-----------------------|---------|
-| amount     | a       | Double    | Amount of damage      |         | 
-| element    |         | String    | Element of the damage |         | 
-| gauge_unit | gu      | Double    | Aura gauge unit       | 1       |
+| Attribute  | Aliases | Data Type | Description           | Default  |
+|------------|---------|-----------|-----------------------|----------|
+| amount     | a       | Double    | Amount of damage      |          | 
+| element    |         | String    | Element of the damage | (config) | 
+| gauge_unit | gu      | String    | Aura gauge unit       | (config) |
 
 Examples:
 ```yml
 test:
   Skills:
-  - elemental_damage{amount=10;element=GEO;gu=1} @Target
+  - elemental_damage{amount=10;element=PYRO;gu=1.0A} @Target
 ```
 
 ### elemental_shield
