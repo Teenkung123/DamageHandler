@@ -12,18 +12,18 @@ import io.lumine.mythic.lib.damage.DamageType;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class TriggerReaction {
 
     @AttackHandle(priority = 1)
     public void attack(PlayerAttackEvent event) {
         for (DamagePacket packet : event.getDamage().getPackets()) {
-            if (Arrays.asList(packet.getTypes()).contains(DamageType.SKILL)) continue;
+            if (Arrays.asList(packet.getTypes()).contains(DamageType.SKILL) || Arrays.asList(packet.getTypes()).contains(DamageType.DOT)) continue;
             if (packet.getElement() == null) continue;
             if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
-            DamageHandler.getAura().getAura(event.getEntity().getUniqueId()).addAura(packet.getElement().getId(), ConfigLoader.getDefaultGaugeUnit());
-            triggerReactions(packet, event.getEntity(), event.getAttack().getPlayer());
+            DamageHandler.getAura().getAura(event.getEntity().getUniqueId()).addAura(packet.getElement().getId(), ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate());
+            triggerReactions(packet, ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate(), event.getEntity(), event.getAttack().getPlayer());
         }
     }
 
@@ -68,22 +68,32 @@ public class TriggerReaction {
                 }
 
                 for (DamagePacket packet : a.getDamage().getPackets()) {
-                    if (Arrays.asList(packet.getTypes()).contains(DamageType.SKILL)) continue;
+                    if (Arrays.asList(packet.getTypes()).contains(DamageType.SKILL) || Arrays.asList(packet.getTypes()).contains(DamageType.DOT)) continue;
                     if (packet.getElement() == null) continue;
                     if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
-                    DamageHandler.getAura().getAura(a.getEntity().getUniqueId()).addAura(packet.getElement().getId(), ConfigLoader.getDefaultGaugeUnit());
-                    triggerReactions(packet, a.getEntity(), attacker);
+                    DamageHandler.getAura().getAura(a.getEntity().getUniqueId()).addAura(packet.getElement().getId(), ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate());
+                    triggerReactions(packet, ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate(), a.getEntity(), attacker);
                 }
             }
 
         } catch (NullPointerException ignored) {}
     }
 
-    public static void triggerReactions(DamagePacket damage, LivingEntity entity, Entity damager) {
+    public static void triggerReactions(DamagePacket damage, double gauge_unit, String decay_rate, LivingEntity entity, Entity damager) {
         if (damage.getElement() == null) return;
+
+        List<ElementalReaction> reactions = new ArrayList<>(DamageHandler.getReaction().getElementalReactions().values());
+        Map<String, Integer> reaction_priority = ConfigLoader.getReactionPriority(damage.getElement().getId());
+        if (reaction_priority != null) {
+            reactions.sort(Comparator.comparingInt(o -> {
+                if (!reaction_priority.containsKey(o.getId())) return 0;
+                return reaction_priority.get(o.getId());
+            }));
+        }
+
         for (ElementalReaction elementalReaction : DamageHandler.getReaction().getElementalReactions().values()) {
             if (elementalReaction.getTrigger().equals(damage.getElement().getId()) && DamageHandler.getAura().getAura(entity.getUniqueId()).getMapAura().containsKey(elementalReaction.getAura())) {
-                elementalReaction.trigger(damage, entity, damager);
+                elementalReaction.trigger(damage, gauge_unit, decay_rate, entity, damager);
             }
         }
     }

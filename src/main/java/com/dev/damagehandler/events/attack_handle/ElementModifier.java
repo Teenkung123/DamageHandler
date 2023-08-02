@@ -8,6 +8,7 @@ import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.lib.api.event.AttackEvent;
 import io.lumine.mythic.lib.api.event.PlayerAttackEvent;
 import io.lumine.mythic.lib.damage.DamagePacket;
+import io.lumine.mythic.lib.damage.DamageType;
 import io.lumine.mythic.lib.element.Element;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -31,6 +33,9 @@ public class ElementModifier implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityAttack(AttackEvent event) {
+        for (DamagePacket packet : event.getDamage().getPackets()) {
+            if (Arrays.asList(packet.getTypes()).contains(DamageType.DOT)) return;
+        }
 
         Element defaultElement = Objects.requireNonNull(Element.valueOf(ConfigLoader.getDefaultElement()));
 

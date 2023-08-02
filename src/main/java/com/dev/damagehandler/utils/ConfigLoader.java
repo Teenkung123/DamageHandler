@@ -14,10 +14,10 @@ import java.util.*;
 
 public class ConfigLoader {
 
-    private static Long auraTime;
     private static String defaultElement;
     private static Map<String, String> elementalModifier = new HashMap<>();
     private static List<String> auraWhitelist;
+    private static HashMap<String, Map<String, Integer>> reactionPriority = new HashMap<>();
 
     private static final HashMap<String, DoubleStatRegister> doubleStats = new HashMap<>();
     private static final HashMap<String, BooleanStatRegister> booleanStats = new HashMap<>();
@@ -25,12 +25,21 @@ public class ConfigLoader {
     public static void loadConfig() {
         FileConfiguration config = DamageHandler.getInstance().getConfig();
 
-        auraTime = config.getLong("General.aura-duration-per-unit", 200);
         defaultElement = config.getString("General.default-element");
         auraWhitelist = config.getStringList("General.aura-whitelist");
 
         for (String damageCause : Objects.requireNonNull(config.getConfigurationSection("Elemental-Modifier")).getKeys(false)) {
             elementalModifier.put(damageCause, config.getString("Elemental-Modifier."+damageCause));
+        }
+
+        for (String element : Objects.requireNonNull(config.getConfigurationSection("Reaction-Priority")).getKeys(false)) {
+            Map<String, Integer> priority = new HashMap<>();
+            int i = 1;
+            for (String reaction : config.getStringList("Reaction-Priority."+element)) {
+                priority.put(reaction, i);
+                i++;
+            }
+            reactionPriority.put(element, priority);
         }
 
         //This part will load all stats from the config and then register them to MMOItems
@@ -42,19 +51,36 @@ public class ConfigLoader {
         DamageHandler.getInstance().reloadConfig();
         loadConfig();
     }
+    public static Map<String, Integer> getReactionPriority(String element) {
+        return reactionPriority.get(element);
+    }
 
     public static String getAuraElement(String reaction_id) {
         return DamageHandler.getInstance().getConfig().getString("Elemental-Reaction."+reaction_id+".aura-element");
     }
 
+    public static String getReactionDisplay(String reaction_id) {
+        return DamageHandler.getInstance().getConfig().getString("Elemental-Reaction."+reaction_id+".display");
+    }
     public static String getTriggerElement(String reaction_id) {
         return DamageHandler.getInstance().getConfig().getString("Elemental-Reaction."+reaction_id+".trigger-element");
     }
-
-    public static Long getAuraTime() {
-        return auraTime;
+    public static double getGaugeUnitTax(String reaction_id) {
+        return DamageHandler.getInstance().getConfig().getDouble("Elemental-Reaction."+reaction_id+".gauge-unit-tax");
     }
-    public static Double getDefaultGaugeUnit() { return DamageHandler.getInstance().getConfig().getDouble("General.default-gauge-unit"); }
+    public static Long getDecayRate(String suffix) {
+        return DamageHandler.getInstance().getConfig().getLong("General.decay-rate."+suffix);
+    }
+    public static Double getDefaultGaugeUnit() { return Double.parseDouble(Objects.requireNonNull(DamageHandler.getInstance().getConfig().getString("General.default-gauge-unit")).split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[0]); }
+    public static String getDefaultDecayRate() { return Objects.requireNonNull(DamageHandler.getInstance().getConfig().getString("General.default-gauge-unit")).split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[1]; }
+    public static String getDefaultGauge() { return DamageHandler.getInstance().getConfig().getString("General.default-gauge-unit"); }
+    public static String getSpecialAuraIcon(String aura_id) {
+        return DamageHandler.getInstance().getConfig().getString("Special-Aura."+aura_id+".icon");
+    }
+    public static String getSpecialAuraColor(String aura_id) {
+        return DamageHandler.getInstance().getConfig().getString("Special-Aura."+aura_id+".color");
+    }
+
     public static String getDefaultElement() {
         return defaultElement;
     }

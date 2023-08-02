@@ -55,6 +55,10 @@ public class ASTDamageIndicators extends GameIndicators {
     )
     public void a(AttackEvent event) {
 
+        for (DamagePacket packet : event.getDamage().getPackets()) {
+            if (Arrays.asList(packet.getTypes()).contains(DamageType.DOT)) return;
+        }
+
         if (!this.enable) { return; }
 
         Entity entity = event.getEntity();

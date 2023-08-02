@@ -9,6 +9,7 @@ import com.dev.damagehandler.utils.FormulaConverter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.lib.damage.DamagePacket;
+import io.lumine.mythic.lib.damage.DamageType;
 import net.Indyuce.mmocore.api.player.PlayerData;
 import net.Indyuce.mmocore.api.player.stats.PlayerStats;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -62,9 +64,10 @@ public class MobAttack implements Listener {
                 // get Vi Mob and check if it is mythic mob or regular mob
                 ActiveMob attackerMythicMob = MythicBukkit.inst().getMobManager().getActiveMob(attacker.getUniqueId()).orElse(null);
 
+                if (Arrays.asList(packet.getTypes()).contains(DamageType.DOT) || Arrays.asList(packet.getTypes()).contains(DamageType.MINION)) continue;
+
                 // working only damage that have element (include physical damage)
                 if (packet.getElement() == null) {
-                    packet.setValue(0);
                     continue;
                 }
                 FileConfiguration config = DamageHandler.getInstance().getConfig();
