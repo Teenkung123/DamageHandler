@@ -40,20 +40,6 @@ public class AuraVisualizer {
 
                         mapHologram.remove(uuid);
 
-                    /*
-                    PacketContainer ridingPacket = manager.createPacket(PacketType.Play.Server.MOUNT);
-
-                    ridingPacket.getIntegers().write(0, entity.getEntityId());
-                    int[] holos = {textDisplay.getEntityId(), textDisplay.getEntityId(), textDisplay.getEntityId(), textDisplay.getEntityId()};
-                    ridingPacket.getIntegerArrays().write(0, holos);
-
-                    for (Entity nearbyEntity : entity.getNearbyEntities(30, 30, 30)) {
-                        if (!(nearbyEntity instanceof Player player)) continue;
-                        manager.sendServerPacket(player, ridingPacket);
-                    }
-
-                     */
-
                         continue;
                     }
 

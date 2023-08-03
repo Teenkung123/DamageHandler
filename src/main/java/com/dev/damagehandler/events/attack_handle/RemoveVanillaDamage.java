@@ -24,7 +24,6 @@ public class RemoveVanillaDamage implements Listener{
             ignoreCancelled = true
     )
     public void onDamage(EntityDamageEvent event) {
-
         if (!DamageHandler.getInstance().getConfig().getBoolean("General.disable-vanilla-damage")) { return; }
 
         if (event.getEntity() instanceof LivingEntity && !(event instanceof DamageCheckEvent) && event.getDamage() != 0.0) {

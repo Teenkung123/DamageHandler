@@ -68,6 +68,7 @@ public class MobAttack implements Listener {
 
                 // working only damage that have element (include physical damage)
                 if (packet.getElement() == null) {
+                    packet.setValue(0);
                     continue;
                 }
                 FileConfiguration config = DamageHandler.getInstance().getConfig();

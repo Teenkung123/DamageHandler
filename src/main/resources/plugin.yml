@@ -3,8 +3,8 @@ version: '${version}'
 main: com.dev.damagehandler.DamageHandler
 api-version: 1.19
 authors:
-  - Teenkung123
   - downYoutube2548
+  - Teenkung123
 
 commands:
   damagehandle:
