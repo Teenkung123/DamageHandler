@@ -1,7 +1,7 @@
 package com.dev.damagehandler.events.attack_handle.attack_priority;
 
 import com.dev.damagehandler.DamageHandler;
-import com.dev.damagehandler.debuff.debuffs.ElementalShield;
+import com.dev.damagehandler.buff.buffs.ElementalShield;
 import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
 import io.lumine.mythic.lib.UtilityMethods;
 import io.lumine.mythic.lib.api.event.AttackEvent;
@@ -18,7 +18,7 @@ public class ShieldRefutation {
         for (DamagePacket packet : event.getDamage().getPackets()) {
             if (packet.getElement() == null) continue;
 
-            ElementalShield shield = DamageHandler.getDebuff().getDebuff(event.getEntity().getUniqueId()).getActivateDebuff(ElementalShield.class, new String[]{"element"}, new String[]{packet.getElement().getId()});
+            ElementalShield shield = DamageHandler.getBuff().getBuff(event.getEntity().getUniqueId()).getActivateBuff(ElementalShield.class, new String[]{"element"}, new String[]{packet.getElement().getId()});
             if (shield == null) continue;
             double shield_attack;
 
@@ -28,11 +28,11 @@ public class ShieldRefutation {
                 packet.setValue(0);
             } else if (shield.getAmount() < packet.getValue()) {
                 shield_attack = shield.getAmount();
-                DamageHandler.getDebuff().getDebuff(event.getEntity().getUniqueId()).removeDebuff(shield.getUniqueId());
+                DamageHandler.getBuff().getBuff(event.getEntity().getUniqueId()).removeBuff(shield.getUniqueId());
                 packet.setValue(packet.getValue() - shield.getAmount());
             } else {
                 shield_attack = shield.getAmount();
-                DamageHandler.getDebuff().getDebuff(event.getEntity().getUniqueId()).removeDebuff(shield.getUniqueId());
+                DamageHandler.getBuff().getBuff(event.getEntity().getUniqueId()).removeBuff(shield.getUniqueId());
                 packet.setValue(0);
             }
 

@@ -1,7 +1,7 @@
 package com.dev.damagehandler.mechanics;
 
 import com.dev.damagehandler.DamageHandler;
-import com.dev.damagehandler.debuff.debuffs.ElementalResistanceReduction;
+import com.dev.damagehandler.buff.buffs.ElementalResistanceReduction;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
@@ -25,7 +25,7 @@ public class reduce_resistance implements ITargetedEntitySkill {
     public SkillResult castAtEntity(SkillMetadata skillMetadata, AbstractEntity abstractEntity) {
         if (BukkitAdapter.adapt(abstractEntity) != null) {
             Entity bukkittarget = BukkitAdapter.adapt(abstractEntity);
-            DamageHandler.getDebuff().getDebuff(bukkittarget.getUniqueId()).addDebuff(new ElementalResistanceReduction(amount, duration, element));
+            DamageHandler.getBuff().getBuff(bukkittarget.getUniqueId()).addBuff(new ElementalResistanceReduction(amount, duration, element));
         }
         return SkillResult.SUCCESS;
     }

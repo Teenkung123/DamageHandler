@@ -1,7 +1,7 @@
 package com.dev.damagehandler.mechanics;
 
 import com.dev.damagehandler.DamageHandler;
-import com.dev.damagehandler.debuff.debuffs.ElementalShield;
+import com.dev.damagehandler.buff.buffs.ElementalShield;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
@@ -26,7 +26,7 @@ public class elemental_shield implements ITargetedEntitySkill {
     public SkillResult castAtEntity(SkillMetadata skillMetadata, AbstractEntity abstractEntity) {
         if (BukkitAdapter.adapt(abstractEntity) != null) {
             Entity bukkittarget = BukkitAdapter.adapt(abstractEntity);
-            DamageHandler.getDebuff().getDebuff(bukkittarget.getUniqueId()).addDebuff(new ElementalShield(amount, element, duration));
+            DamageHandler.getBuff().getBuff(bukkittarget.getUniqueId()).addBuff(new ElementalShield(amount, element, duration));
         }
         return SkillResult.SUCCESS;
     }

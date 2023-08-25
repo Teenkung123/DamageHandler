@@ -1,11 +1,11 @@
-package com.dev.damagehandler.debuff.debuffs;
+package com.dev.damagehandler.buff.buffs;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class DefenseReduction extends DebuffStatus {
+public class DefenseReduction extends BuffStatus {
 
     private final double amount;
 
@@ -19,12 +19,12 @@ public class DefenseReduction extends DebuffStatus {
     }
 
     @Override
-    public List<DebuffStatus> getCurrentDebuff(List<DebuffStatus> allDebuff) {
-        List<DebuffStatus> output = new ArrayList<>();
+    public List<BuffStatus> getCurrentBuff(List<BuffStatus> allDebuff) {
+        List<BuffStatus> output = new ArrayList<>();
 
         List<DefenseReduction> l = new ArrayList<>();
-        for (DebuffStatus debuffStatus : allDebuff) {
-            DefenseReduction defenseReduction = (DefenseReduction) debuffStatus;
+        for (BuffStatus buffStatus : allDebuff) {
+            DefenseReduction defenseReduction = (DefenseReduction) buffStatus;
 
             l.add(defenseReduction);
         }

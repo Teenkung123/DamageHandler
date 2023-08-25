@@ -3,7 +3,7 @@ package com.dev.damagehandler;
 import com.dev.damagehandler.aura.Aura;
 import com.dev.damagehandler.aura.AuraVisualizer;
 import com.dev.damagehandler.commands.core;
-import com.dev.damagehandler.debuff.Debuff;
+import com.dev.damagehandler.buff.Buff;
 import com.dev.damagehandler.events.MythicMechanicLoad;
 import com.dev.damagehandler.events.attack_handle.CancelFireTick;
 import com.dev.damagehandler.events.attack_handle.ElementModifier;
@@ -51,7 +51,7 @@ public final class DamageHandler extends JavaPlugin {
 
     private static DamageHandler instance;
     private static Aura aura;
-    private static Debuff debuff;
+    private static Buff buff;
     private static Attack attack;
     private static ReactionManager reactionManager;
 
@@ -59,7 +59,7 @@ public final class DamageHandler extends JavaPlugin {
     public void onEnable() {
         instance = this;
         aura = new Aura();
-        debuff = new Debuff();
+        buff = new Buff();
         attack = new Attack();
         reactionManager = new ReactionManager();
         loadResource(this, "config.yml");
@@ -67,7 +67,7 @@ public final class DamageHandler extends JavaPlugin {
         saveDefaultConfig();
         ConfigLoader.loadConfig();
         Aura.startTick();
-        Debuff.startTick();
+        Buff.startTick();
         AuraVisualizer.start();
 
         Objects.requireNonNull(Bukkit.getPluginCommand("damagehandle")).setExecutor(new core());
@@ -108,7 +108,7 @@ public final class DamageHandler extends JavaPlugin {
         return instance;
     }
     public static Aura getAura() { return aura; }
-    public static Debuff getDebuff() { return debuff; }
+    public static Buff getBuff() { return buff; }
     public static Attack getAttack() { return attack; }
     public static ReactionManager getReaction() { return reactionManager; }
 

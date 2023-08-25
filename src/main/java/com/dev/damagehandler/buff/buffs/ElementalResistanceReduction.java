@@ -1,8 +1,8 @@
-package com.dev.damagehandler.debuff.debuffs;
+package com.dev.damagehandler.buff.buffs;
 
 import java.util.*;
 
-public class ElementalResistanceReduction extends DebuffStatus {
+public class ElementalResistanceReduction extends BuffStatus {
     private final double amount;
     private final String element;
 
@@ -21,12 +21,12 @@ public class ElementalResistanceReduction extends DebuffStatus {
     }
 
     @Override
-    public List<DebuffStatus> getCurrentDebuff(List<DebuffStatus> allDebuff) {
-        List<DebuffStatus> output = new ArrayList<>();
+    public List<BuffStatus> getCurrentBuff(List<BuffStatus> allDebuff) {
+        List<BuffStatus> output = new ArrayList<>();
 
         // cast List<DebuffStatus> to List<ElementalResistanceReduction>
         List<ElementalResistanceReduction> allElementalRes = new ArrayList<>();
-        for (DebuffStatus debuff : allDebuff) {
+        for (BuffStatus debuff : allDebuff) {
             if (debuff instanceof ElementalResistanceReduction) {
                 allElementalRes.add((ElementalResistanceReduction) debuff);
             }

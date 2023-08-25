@@ -1,22 +1,22 @@
-package com.dev.damagehandler.debuff.debuffs;
+package com.dev.damagehandler.buff.buffs;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * The class used to specify the details of Debuff.
+ * The class used to specify the details of Buff.
  */
-public abstract class DebuffStatus {
+public abstract class BuffStatus {
     public long duration;
     private final UUID uuid;
 
-    public DebuffStatus(long duration) {
+    public BuffStatus(long duration) {
         this.duration = duration;
         this.uuid = UUID.randomUUID();
     }
 
-    public abstract List<DebuffStatus> getCurrentDebuff(List<DebuffStatus> allDebuff);
+    public abstract List<BuffStatus> getCurrentBuff(List<BuffStatus> allBuff);
 
     public long getDuration() {
         return duration;

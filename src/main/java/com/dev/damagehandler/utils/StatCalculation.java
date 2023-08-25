@@ -1,8 +1,8 @@
 package com.dev.damagehandler.utils;
 
 import com.dev.damagehandler.DamageHandler;
-import com.dev.damagehandler.debuff.debuffs.DefenseReduction;
-import com.dev.damagehandler.debuff.debuffs.ElementalResistanceReduction;
+import com.dev.damagehandler.buff.buffs.DefenseReduction;
+import com.dev.damagehandler.buff.buffs.ElementalResistanceReduction;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.lib.damage.DamagePacket;
@@ -249,7 +249,7 @@ public class StatCalculation {
         if (entity == null) return 0;
         if (!entity.isValid()) return 0;
 
-        ElementalResistanceReduction er = DamageHandler.getDebuff().getDebuff(uuid).getActivateDebuff(ElementalResistanceReduction.class, new String[]{"element"}, new String[]{element});
+        ElementalResistanceReduction er = DamageHandler.getBuff().getBuff(uuid).getActivateBuff(ElementalResistanceReduction.class, new String[]{"element"}, new String[]{element});
         double elemental_resistance;
 
         if (entity instanceof Player player) {
@@ -274,7 +274,7 @@ public class StatCalculation {
         if (entity == null) return 0;
         if (!entity.isValid()) return 0;
 
-        DefenseReduction dr = DamageHandler.getDebuff().getDebuff(uuid).getActivateDebuff(DefenseReduction.class, new String[]{}, new String[]{});
+        DefenseReduction dr = DamageHandler.getBuff().getBuff(uuid).getActivateBuff(DefenseReduction.class, new String[]{}, new String[]{});
         double defense;
 
         if (entity instanceof Player player) {
