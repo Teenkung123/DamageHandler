@@ -4,6 +4,10 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
+import com.dev.damagehandler.utils.StatCalculation;
+import io.lumine.mythic.lib.damage.DamagePacket;
+import io.lumine.mythic.lib.damage.DamageType;
+import io.lumine.mythic.lib.element.Element;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -43,7 +47,12 @@ public class core implements CommandExecutor, TabExecutor {
                     packetContainer.getIntLists().write(0, i);
                     manager.sendServerPacket(player, packetContainer);
                 }
-                case "test" -> player.sendMessage(player.getUniqueId().toString());
+                case "test" -> {
+                    if (args.length >= 2) {
+                        DamagePacket packet = new DamagePacket(Double.parseDouble(args[1]), Element.valueOf("CRYO"), DamageType.PHYSICAL);
+                        player.sendMessage(String.valueOf(StatCalculation.getTotalDamage(player.getUniqueId(), packet, true)));
+                    }
+                }
             }
         }
 

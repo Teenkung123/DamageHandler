@@ -81,6 +81,10 @@ public class ConfigLoader {
         return DamageHandler.getInstance().getConfig().getString("Special-Aura."+aura_id+".color");
     }
 
+    public static String getDamageCalculation(String section) {
+        return DamageHandler.getInstance().getConfig().getString("Damage-Calculation."+section);
+    }
+
     public static String getDefaultElement() {
         return defaultElement;
     }

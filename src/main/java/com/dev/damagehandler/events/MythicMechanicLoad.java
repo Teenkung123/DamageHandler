@@ -25,5 +25,4 @@ public class MythicMechanicLoad implements Listener {
             event.register(new elemental_shield(event.getConfig()));
         }
     }
-
 }

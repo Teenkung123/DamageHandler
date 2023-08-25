@@ -23,7 +23,7 @@ public class TriggerReaction {
             if (packet.getElement() == null) continue;
             if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
             DamageHandler.getAura().getAura(event.getEntity().getUniqueId()).addAura(packet.getElement().getId(), ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate());
-            triggerReactions(packet, ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate(), event.getEntity(), event.getAttack().getPlayer());
+            triggerReactions(packet, ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate(), event.getEntity(), event.getAttacker().getPlayer());
         }
     }
 
@@ -91,7 +91,7 @@ public class TriggerReaction {
             }));
         }
 
-        for (ElementalReaction elementalReaction : DamageHandler.getReaction().getElementalReactions().values()) {
+        for (ElementalReaction elementalReaction : reactions) {
             if (elementalReaction.getTrigger().equals(damage.getElement().getId()) && DamageHandler.getAura().getAura(entity.getUniqueId()).getMapAura().containsKey(elementalReaction.getAura())) {
                 elementalReaction.trigger(damage, gauge_unit, decay_rate, entity, damager);
             }
