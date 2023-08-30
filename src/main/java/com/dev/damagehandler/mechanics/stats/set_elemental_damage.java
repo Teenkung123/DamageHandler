@@ -1,6 +1,5 @@
 package com.dev.damagehandler.mechanics.stats;
 
-import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.utils.ConfigLoader;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
@@ -13,7 +12,6 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.core.skills.variables.Variable;
 import io.lumine.mythic.core.skills.variables.VariableType;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 
 public class set_elemental_damage implements ITargetedEntitySkill {

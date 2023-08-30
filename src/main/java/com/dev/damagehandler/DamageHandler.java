@@ -1,7 +1,6 @@
 package com.dev.damagehandler;
 
 import com.dev.damagehandler.aura.Aura;
-import com.dev.damagehandler.visuals.AuraVisualizer;
 import com.dev.damagehandler.buff.Buff;
 import com.dev.damagehandler.commands.core;
 import com.dev.damagehandler.events.MythicMechanicLoad;
@@ -14,12 +13,13 @@ import com.dev.damagehandler.events.attack_handle.attack_priority.TriggerReactio
 import com.dev.damagehandler.events.attack_handle.deal_damage.MiscAttack;
 import com.dev.damagehandler.events.attack_handle.deal_damage.MobAttack;
 import com.dev.damagehandler.events.attack_handle.deal_damage.PlayerAttack;
-import com.dev.damagehandler.visuals.ASTDamageIndicators;
 import com.dev.damagehandler.listener.AttackEventListener;
 import com.dev.damagehandler.reaction.ReactionManager;
 import com.dev.damagehandler.reaction.reactions.Overloaded;
 import com.dev.damagehandler.reaction.reactions.ReverseOverloaded;
 import com.dev.damagehandler.utils.ConfigLoader;
+import com.dev.damagehandler.visuals.ASTDamageIndicators;
+import com.dev.damagehandler.visuals.AuraVisualizer;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.TextDisplay;
