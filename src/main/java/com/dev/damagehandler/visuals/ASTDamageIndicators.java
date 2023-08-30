@@ -1,4 +1,4 @@
-package com.dev.damagehandler.events.indicator;
+package com.dev.damagehandler.visuals;
 
 import io.lumine.mythic.lib.MythicLib;
 import io.lumine.mythic.lib.UtilityMethods;

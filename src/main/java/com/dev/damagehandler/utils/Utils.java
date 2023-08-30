@@ -1,5 +1,6 @@
 package com.dev.damagehandler.utils;
 
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,5 +22,10 @@ public class Utils {
     public static String[] splitTextAndNumber(String input) {
         String regex = "(?<=(\\d([.]\\d+)?))(?=[A-Za-z]+)";
         return input.split(regex);
+    }
+
+    public static String Format(Double input) {
+        DecimalFormat df = new DecimalFormat("0.0");
+        return df.format(input);
     }
 }

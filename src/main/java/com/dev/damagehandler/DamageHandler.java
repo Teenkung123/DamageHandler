@@ -1,9 +1,9 @@
 package com.dev.damagehandler;
 
 import com.dev.damagehandler.aura.Aura;
-import com.dev.damagehandler.aura.AuraVisualizer;
-import com.dev.damagehandler.commands.core;
+import com.dev.damagehandler.visuals.AuraVisualizer;
 import com.dev.damagehandler.buff.Buff;
+import com.dev.damagehandler.commands.core;
 import com.dev.damagehandler.events.MythicMechanicLoad;
 import com.dev.damagehandler.events.attack_handle.CancelFireTick;
 import com.dev.damagehandler.events.attack_handle.ElementModifier;
@@ -11,10 +11,10 @@ import com.dev.damagehandler.events.attack_handle.RemoveVanillaDamage;
 import com.dev.damagehandler.events.attack_handle.attack_priority.Attack;
 import com.dev.damagehandler.events.attack_handle.attack_priority.ShieldRefutation;
 import com.dev.damagehandler.events.attack_handle.attack_priority.TriggerReaction;
-import com.dev.damagehandler.events.deal_damage.MiscAttack;
-import com.dev.damagehandler.events.deal_damage.MobAttack;
-import com.dev.damagehandler.events.deal_damage.PlayerAttack;
-import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
+import com.dev.damagehandler.events.attack_handle.deal_damage.MiscAttack;
+import com.dev.damagehandler.events.attack_handle.deal_damage.MobAttack;
+import com.dev.damagehandler.events.attack_handle.deal_damage.PlayerAttack;
+import com.dev.damagehandler.visuals.ASTDamageIndicators;
 import com.dev.damagehandler.listener.AttackEventListener;
 import com.dev.damagehandler.reaction.ReactionManager;
 import com.dev.damagehandler.reaction.reactions.Overloaded;

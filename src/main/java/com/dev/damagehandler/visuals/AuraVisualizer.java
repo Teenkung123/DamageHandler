@@ -1,6 +1,7 @@
-package com.dev.damagehandler.aura;
+package com.dev.damagehandler.visuals;
 
 import com.dev.damagehandler.DamageHandler;
+import com.dev.damagehandler.aura.Aura;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
@@ -23,14 +24,14 @@ public class AuraVisualizer {
             try {
                 for (UUID uuid : mapHologram.keySet()) {
                     Entity entity = Bukkit.getEntity(uuid);
-                    if (entity == null || entity.isDead() || !Aura.entityAura.containsKey(uuid)) {
+                    if (entity == null || entity.isDead() || !Aura.getMapEntityAura().containsKey(uuid)) {
                         TextDisplay textDisplay = mapHologram.get(uuid);
                         textDisplay.remove();
                         mapHologram.remove(uuid);
                     }
                 }
 
-                for (UUID uuid : Aura.entityAura.keySet()) {
+                for (UUID uuid : Aura.getMapEntityAura().keySet()) {
                     Entity entity = Bukkit.getEntity(uuid);
                     if (entity == null || entity.isDead()) {
                         if (!mapHologram.containsKey(uuid)) continue;

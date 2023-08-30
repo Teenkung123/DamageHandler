@@ -26,6 +26,8 @@ public class Aura {
         }
     }
 
+    public static Map<UUID, AuraData> getMapEntityAura() { return entityAura; }
+
     public static void startTick() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(DamageHandler.getInstance(), () -> {
             try {

@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.dev.damagehandler.utils.StatCalculation;
+import io.lumine.mythic.lib.damage.DamageMetadata;
 import io.lumine.mythic.lib.damage.DamagePacket;
 import io.lumine.mythic.lib.damage.DamageType;
 import io.lumine.mythic.lib.element.Element;
@@ -12,6 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class core implements CommandExecutor, TabExecutor {
+
+    public static Entity entity;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -52,6 +56,18 @@ public class core implements CommandExecutor, TabExecutor {
                         DamagePacket packet = new DamagePacket(Double.parseDouble(args[1]), Element.valueOf("CRYO"), DamageType.PHYSICAL);
                         player.sendMessage(String.valueOf(StatCalculation.getTotalDamage(player.getUniqueId(), packet, true)));
                     }
+                }
+                case "kill" -> {
+                    DamageMetadata damage = new DamageMetadata(30, Element.valueOf("PYRO"), DamageType.PHYSICAL);
+
+                    /*
+                    LumineExecutors
+                    AttackMetadata attack = new AttackMetadata(damage, player, new ASTEntityStatProvider((LivingEntity) entity));
+                    Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> {
+                        DamageHandler.getDamageManager().registerAttack(attack, false, true);
+                    });
+
+                     */
                 }
             }
         }

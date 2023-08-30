@@ -2,7 +2,7 @@ package com.dev.damagehandler.events.attack_handle.attack_priority;
 
 import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.buff.buffs.ElementalShield;
-import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
+import com.dev.damagehandler.visuals.ASTDamageIndicators;
 import io.lumine.mythic.lib.UtilityMethods;
 import io.lumine.mythic.lib.api.event.AttackEvent;
 import io.lumine.mythic.lib.damage.DamagePacket;

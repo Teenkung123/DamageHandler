@@ -1,4 +1,4 @@
-package com.dev.damagehandler.mechanics;
+package com.dev.damagehandler.mechanics.apply;
 
 import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.buff.buffs.ElementalResistanceReduction;
@@ -17,16 +17,19 @@ public class reduce_resistance implements ITargetedEntitySkill {
 
     public reduce_resistance(MythicLineConfig config) {
         amount = config.getDouble(new String[] {"amount", "a"}, 0);
-        duration = config.getLong(new String[] {"duration"}, 0);
-        element = config.getString(new String[] {"element"});
+        duration = config.getLong(new String[] {"duration", "d", "t"}, 0);
+        element = config.getString(new String[] {"element", "e"});
     }
 
     @Override
     public SkillResult castAtEntity(SkillMetadata skillMetadata, AbstractEntity abstractEntity) {
+        if (element == null) return SkillResult.INVALID_CONFIG;
+
         if (BukkitAdapter.adapt(abstractEntity) != null) {
             Entity bukkittarget = BukkitAdapter.adapt(abstractEntity);
             DamageHandler.getBuff().getBuff(bukkittarget.getUniqueId()).addBuff(new ElementalResistanceReduction(amount, duration, element));
+            return SkillResult.SUCCESS;
         }
-        return SkillResult.SUCCESS;
+        return SkillResult.ERROR;
     }
 }

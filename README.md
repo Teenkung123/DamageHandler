@@ -13,11 +13,11 @@
 Deal elemental damage or physical damage
 
 
-| Attribute  | Aliases | Data Type | Description           | Default  |
-|------------|---------|-----------|-----------------------|----------|
-| amount     | a       | Double    | Amount of damage      |          | 
-| element    |         | String    | Element of the damage | (config) | 
-| gauge_unit | gu      | String    | Aura gauge unit       | (config) |
+| Attribute  | Aliases | Data Type | Description           | Default   |
+|------------|---------|-----------|-----------------------|-----------|
+| amount     | a       | Double    | Amount of damage      | 0         | 
+| element    | e       | String    | Element of the damage | (default) | 
+| gauge_unit | gu      | String    | Aura gauge unit       | (default) |
 
 Examples:
 ```yml
@@ -31,9 +31,9 @@ Create elemental shields according to the specified quantity
 
 | Attribute | Aliases | Data Type | Description                               | Default |
 |-----------|---------|-----------|-------------------------------------------|---------|
-| amount    | a       | Double    | Quantity of the elemental shield          |         | 
-| element   |         | String    | Element of the shield                     |         | 
-| duration  |         | Long      | Duration of the elemental shield in ticks |         |
+| amount    | a       | Double    | Quantity of the elemental shield          | 0       | 
+| element   | e       | String    | Element of the shield                     |         | 
+| duration  | d, t    | Long      | Duration of the elemental shield in ticks | 0       |
 
 Examples:
 ```yml
@@ -45,10 +45,10 @@ test:
 ### reduce_defense
 Reduce defensive power according to the specified quantity and duration
 
-| Attribute | Aliases | Data Type | Description                             | Default |
-|-----------|---------|-----------|-----------------------------------------|---------|
-| amount    | a       | Double    | The amount of defense to be reduced (%) |         | 
-| duration  |         | Long      | The duration for the reduction          |         |
+| Attribute | Aliases | Data Type | Description                             | Default  |
+|-----------|---------|-----------|-----------------------------------------|----------|
+| amount    | a       | Double    | The amount of defense to be reduced (%) | 0        | 
+| duration  | d, t    | Long      | The duration for the reduction          | 0        |
 
 Examples:
 ```yml
@@ -62,9 +62,9 @@ Reduce the resistance of the specified element
 
 | Attribute | Aliases | Data Type | Description                                | Default |
 |-----------|---------|-----------|--------------------------------------------|---------|
-| amount    | a       | Double    | The amount of resistance to be reduced (%) |         | 
-| element   |         | String    | The element of resistance                  |         |
-| duration  |         | Long      | The duration for the reduction             |         |
+| amount    | a       | Double    | The amount of resistance to be reduced (%) | 0       | 
+| element   | e       | String    | The element of resistance                  |         |
+| duration  | d, t    | Long      | The duration for the reduction             | 0       |
 
 Examples:
 ```yml

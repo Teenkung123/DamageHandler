@@ -11,6 +11,7 @@ import io.lumine.mythic.lib.damage.DamagePacket;
 import io.lumine.mythic.lib.damage.DamageType;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.*;
 
@@ -23,7 +24,7 @@ public class TriggerReaction {
             if (packet.getElement() == null) continue;
             if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
             DamageHandler.getAura().getAura(event.getEntity().getUniqueId()).addAura(packet.getElement().getId(), ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate());
-            triggerReactions(packet, ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate(), event.getEntity(), event.getAttacker().getPlayer());
+            triggerReactions(packet, ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate(), event.getEntity(), event.getAttacker().getPlayer(), event.toBukkit().getCause());
         }
     }
 
@@ -49,16 +50,13 @@ public class TriggerReaction {
                     Entity damager = event.getDamager();
                     if (damager instanceof Projectile projectile) {
 
-                        // return if damager is Thrown Potion
-                        if (projectile instanceof AreaEffectCloud || projectile instanceof ThrownPotion) {
-                            return;
+                        // if damager is not Thrown Potion
+                        if (!(projectile instanceof AreaEffectCloud || projectile instanceof ThrownPotion)) {
+                            // if shooter is living entity
+                            if (projectile.getShooter() instanceof LivingEntity) {
+                                attacker = (LivingEntity) projectile.getShooter();
+                            }
                         }
-                        // return if shooter is not living entity
-                        if (!(projectile.getShooter() instanceof LivingEntity)) {
-                            return;
-                        }
-
-                        attacker = (LivingEntity) projectile.getShooter();
 
                     } else if (damager instanceof LivingEntity) {
 
@@ -72,14 +70,14 @@ public class TriggerReaction {
                     if (packet.getElement() == null) continue;
                     if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
                     DamageHandler.getAura().getAura(a.getEntity().getUniqueId()).addAura(packet.getElement().getId(), ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate());
-                    triggerReactions(packet, ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate(), a.getEntity(), attacker);
+                    triggerReactions(packet, ConfigLoader.getDefaultGaugeUnit(), ConfigLoader.getDefaultDecayRate(), a.getEntity(), attacker, a.toBukkit().getCause());
                 }
             }
 
         } catch (NullPointerException ignored) {}
     }
 
-    public static void triggerReactions(DamagePacket damage, double gauge_unit, String decay_rate, LivingEntity entity, Entity damager) {
+    public static void triggerReactions(DamagePacket damage, double gauge_unit, String decay_rate, LivingEntity entity, Entity damager, EntityDamageEvent.DamageCause damage_cause) {
         if (damage.getElement() == null) return;
 
         List<ElementalReaction> reactions = new ArrayList<>(DamageHandler.getReaction().getElementalReactions().values());
@@ -90,10 +88,9 @@ public class TriggerReaction {
                 return reaction_priority.get(o.getId());
             }));
         }
-
         for (ElementalReaction elementalReaction : reactions) {
             if (elementalReaction.getTrigger().equals(damage.getElement().getId()) && DamageHandler.getAura().getAura(entity.getUniqueId()).getMapAura().containsKey(elementalReaction.getAura())) {
-                elementalReaction.trigger(damage, gauge_unit, decay_rate, entity, damager);
+                elementalReaction.trigger(damage, gauge_unit, decay_rate, entity, damager, damage_cause);
             }
         }
     }

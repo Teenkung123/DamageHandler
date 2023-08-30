@@ -1,4 +1,4 @@
-package com.dev.damagehandler.events.deal_damage;
+package com.dev.damagehandler.events.attack_handle.deal_damage;
 
 import com.dev.damagehandler.listener.events.MiscAttackEvent;
 import com.dev.damagehandler.utils.StatCalculation;

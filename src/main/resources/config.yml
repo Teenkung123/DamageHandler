@@ -37,12 +37,21 @@ Elemental-Reaction:
     aura-element: PYRO
     trigger-element: ELECTRO
     gauge-unit-tax: 1.25
-    damage-formula: "2 * (16.12 * (#level# + 16 ) - 257.23) + (1+ (16*(#elemental-mastery#/(#elemental-mastery# + 2000))) ) * #resistance-multiplier#"
+    resistance-element: PYRO
+    damage-formula: "2 * (16.12 * (attacker_level + 16 ) - 257.23) * (1+ (16*(elemental_mastery/(elemental_mastery + 2000))) ) * resistance_multiplier"
+    damage-indicator:
+      - "&c{damage}"
+      - "&cOverloaded"
   REVERSE_OVERLOADED:
     display: "&6Reverse Overloaded"
     aura-element: ELECTRO
     trigger-element: PYRO
     gauge-unit-tax: 1.25
+    resistance-element: PYRO
+    damage-formula: "2 * (16.12 * (attacker_level + 16 ) - 257.23) * (1+ (16*(elemental_mastery/(elemental_mastery + 2000))) ) * resistance_multiplier"
+    damage-indicator:
+      - "&c{damage}"
+      - "&cOverloaded"
 
 Elemental-Modifier:
   # <Damage Cause>: <Element>

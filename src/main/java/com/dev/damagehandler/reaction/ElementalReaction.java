@@ -3,9 +3,10 @@ package com.dev.damagehandler.reaction;
 import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.aura.AuraData;
 import com.dev.damagehandler.events.attack_handle.attack_priority.TriggerReaction;
-import com.dev.damagehandler.events.indicator.ASTDamageIndicators;
+import com.dev.damagehandler.visuals.ASTDamageIndicators;
 import com.dev.damagehandler.stats.provider.ASTEntityStatProvider;
 import com.dev.damagehandler.utils.ConfigLoader;
+import com.dev.damagehandler.utils.DamageManager;
 import io.lumine.mythic.lib.MythicLib;
 import io.lumine.mythic.lib.UtilityMethods;
 import io.lumine.mythic.lib.api.event.IndicatorDisplayEvent;
@@ -23,8 +24,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Random;
@@ -58,32 +61,35 @@ public abstract class ElementalReaction {
     public AuraData getAuraData(UUID uuid) {
         return DamageHandler.getAura().getAura(uuid);
     }
-
-    public void damage(double amount, Entity caster, LivingEntity target) {
-         damage(new DamageMetadata(amount, DamageType.DOT) , caster, target);
+    public ConfigurationSection getConfig() {
+        return DamageHandler.getInstance().getConfig().getConfigurationSection("Elemental-Reaction."+id);
     }
 
-    public void damage(double amount, Entity caster, LivingEntity target, String element, boolean damage_calculate, double aura_gauge_unit, String aura_decay_rate) {
+    public void damage(double amount, Entity caster, LivingEntity target, EntityDamageEvent.DamageCause damage_cause) {
+         damage(new DamageMetadata(amount, DamageType.DOT) , caster, target, damage_cause);
+    }
+
+    public void damage(double amount, Entity caster, LivingEntity target, String element, boolean damage_calculate, double aura_gauge_unit, String aura_decay_rate, EntityDamageEvent.DamageCause damage_cause) {
         Element e = Objects.requireNonNull(MythicLib.plugin.getElements().get(element));
         DamageMetadata damageMetadata = new DamageMetadata(amount, e, damage_calculate ? DamageType.SKILL : DamageType.DOT);
-        damage(damageMetadata, caster, target, aura_gauge_unit, aura_decay_rate);
+        damage(damageMetadata, caster, target, aura_gauge_unit, aura_decay_rate, damage_cause);
     }
 
-    public void damage(double amount, Entity caster, LivingEntity target, @NotNull Element element, boolean damage_calculate, double aura_gauge_unit, String aura_decay_rate) {
+    public void damage(double amount, Entity caster, LivingEntity target, @NotNull Element element, boolean damage_calculate, double aura_gauge_unit, String aura_decay_rate, EntityDamageEvent.DamageCause damage_cause) {
         DamageMetadata damageMetadata = new DamageMetadata(amount, element, damage_calculate ? DamageType.SKILL : DamageType.DOT);
-        damage(damageMetadata, caster, target, aura_gauge_unit, aura_decay_rate);
+        damage(damageMetadata, caster, target, aura_gauge_unit, aura_decay_rate, damage_cause);
     }
 
-    public void damage(double amount, Entity caster, LivingEntity target, String element, boolean damage_calculate) {
+    public void damage(double amount, Entity caster, LivingEntity target, String element, boolean damage_calculate, EntityDamageEvent.DamageCause damage_cause) {
         Element e = Objects.requireNonNull(MythicLib.plugin.getElements().get(element));
-        damage(amount, caster, target, e, damage_calculate);
+        damage(amount, caster, target, e, damage_calculate, damage_cause);
     }
-    public void damage(double amount, Entity caster, LivingEntity target, @NotNull Element element, boolean damage_calculate) {
+    public void damage(double amount, Entity caster, LivingEntity target, @NotNull Element element, boolean damage_calculate, EntityDamageEvent.DamageCause damage_cause) {
         DamageMetadata damageMetadata = new DamageMetadata(amount, element, damage_calculate ? DamageType.SKILL : DamageType.DOT);
-        damage(damageMetadata, caster, target);
+        damage(damageMetadata, caster, target, damage_cause);
     }
 
-    private void damage(DamageMetadata damage, Entity caster, LivingEntity target) {
+    private void damage(DamageMetadata damage, Entity caster, LivingEntity target, EntityDamageEvent.DamageCause damage_cause) {
 
         if (caster instanceof Player) {
             PlayerData playerData = PlayerData.get(caster.getUniqueId());
@@ -92,15 +98,15 @@ public abstract class ElementalReaction {
             PlayerMetadata playerMetadata = new PlayerMetadata(statMap, EquipmentSlot.MAIN_HAND);
             AttackMetadata attack = new AttackMetadata(damage, target, playerMetadata);
 
-            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), () -> MythicLib.plugin.getDamage().registerAttack(attack, false, true));
+            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), () -> DamageManager.registerAttack(attack, false, true, damage_cause));
 
         }  else {
-            AttackMetadata attack = new AttackMetadata(damage, target, new ASTEntityStatProvider((LivingEntity) caster));
-            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> MythicLib.plugin.getDamage().registerAttack(attack, false, true));
+            AttackMetadata attack = new AttackMetadata(damage, target, caster != null ? new ASTEntityStatProvider((LivingEntity) caster) : null);
+            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> DamageManager.registerAttack(attack, false, true, damage_cause));
         }
     }
 
-    private void damage(DamageMetadata damage, Entity caster, LivingEntity target, double gauge_unit, String decay_rate) {
+    private void damage(DamageMetadata damage, Entity caster, LivingEntity target, double gauge_unit, String decay_rate, EntityDamageEvent.DamageCause damage_cause) {
 
         if (caster instanceof Player) {
             PlayerData playerData = PlayerData.get(caster.getUniqueId());
@@ -109,24 +115,24 @@ public abstract class ElementalReaction {
             PlayerMetadata playerMetadata = new PlayerMetadata(statMap, EquipmentSlot.MAIN_HAND);
             AttackMetadata attack = new AttackMetadata(damage, target, playerMetadata);
 
-            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), () -> MythicLib.plugin.getDamage().registerAttack(attack, false, true));
+            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), () -> DamageManager.registerAttack(attack, false, true, damage_cause));
 
             for (DamagePacket packet : damage.getPackets()) {
                 if (packet.getElement() == null) continue;
                 if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
                 DamageHandler.getAura().getAura(target.getUniqueId()).addAura(packet.getElement().getId(), gauge_unit, decay_rate);
-                TriggerReaction.triggerReactions(packet, gauge_unit, decay_rate, target, caster);
+                TriggerReaction.triggerReactions(packet, gauge_unit, decay_rate, target, caster, damage_cause);
             }
 
         }  else {
-            AttackMetadata attack = new AttackMetadata(damage, target, new ASTEntityStatProvider((LivingEntity) caster));
-            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> MythicLib.plugin.getDamage().registerAttack(attack, false, true));
+            AttackMetadata attack = new AttackMetadata(damage, target, caster != null ? new ASTEntityStatProvider((LivingEntity) caster) : null);
+            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> DamageManager.registerAttack(attack, false, true, damage_cause));
 
             for (DamagePacket packet : damage.getPackets()) {
                 if (packet.getElement() == null) continue;
                 if (!ConfigLoader.getAuraWhitelist().contains(packet.getElement().getId())) continue;
                 DamageHandler.getAura().getAura(target.getUniqueId()).addAura(packet.getElement().getId(), gauge_unit, decay_rate);
-                TriggerReaction.triggerReactions(packet, gauge_unit, decay_rate, target, caster);
+                TriggerReaction.triggerReactions(packet, gauge_unit, decay_rate, target, caster, damage_cause);
             }
         }
     }
@@ -144,6 +150,6 @@ public abstract class ElementalReaction {
         }
     }
 
-    public abstract void trigger(DamagePacket damage, double gauge_unit, String decay_rate, LivingEntity entity, Entity damager);
+    public abstract void trigger(DamagePacket damage, double gauge_unit, String decay_rate, LivingEntity entity, @Nullable Entity damager, EntityDamageEvent.DamageCause damage_cause);
 
 }
