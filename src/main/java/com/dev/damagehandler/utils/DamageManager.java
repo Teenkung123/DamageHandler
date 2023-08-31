@@ -75,9 +75,10 @@ public class DamageManager {
             } else {
                 Validate.isTrue(damage > 0.0, "Damage must be strictly positive");
                 if (damager == null) {
-                    target.setHealth(Math.max(0, target.getHealth() - damage));
                     EntityDamageEvent event = new EntityDamageEvent(target, damage_cause, damage);
                     target.setLastDamageCause(event);
+                    target.setLastDamage(damage);
+                    target.setHealth(Math.max(0, target.getHealth() - damage));
                     Bukkit.getPluginManager().callEvent(event);
                 } else {
                     target.damage(damage, damager);
