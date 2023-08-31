@@ -38,9 +38,11 @@ public abstract class ElementalReaction {
     private final String id;
     private final String aura;
     private final String trigger;
+    private final String display;
 
-    public ElementalReaction(String id, String aura, String trigger) {
+    public ElementalReaction(String id, String display, String aura, String trigger) {
         this.id = id;
+        this.display = display;
         this.aura = aura;
         this.trigger = trigger;
     }
@@ -55,7 +57,7 @@ public abstract class ElementalReaction {
         return this.trigger;
     }
     public String getDisplay() {
-        return ConfigLoader.getReactionDisplay(id);
+        return this.display;
     }
 
     public AuraData getAuraData(UUID uuid) {

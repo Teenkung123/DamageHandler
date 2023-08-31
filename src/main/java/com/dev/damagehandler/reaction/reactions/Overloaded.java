@@ -1,6 +1,6 @@
 package com.dev.damagehandler.reaction.reactions;
 
-import com.dev.damagehandler.reaction.ElementalReaction;
+import com.dev.damagehandler.reaction.reaction_type.TriggerAuraReaction;
 import com.dev.damagehandler.utils.ConfigLoader;
 import com.dev.damagehandler.utils.StatCalculation;
 import com.dev.damagehandler.utils.Utils;
@@ -17,18 +17,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.Nullable;
 
-public class Overloaded extends ElementalReaction {
+public class Overloaded extends TriggerAuraReaction {
     public Overloaded() {
-        super("OVERLOADED", ConfigLoader.getAuraElement("OVERLOADED"), ConfigLoader.getTriggerElement("OVERLOADED"));
+        super("OVERLOADED", ConfigLoader.getReactionDisplay("OVERLOADED"), ConfigLoader.getAuraElement("OVERLOADED"), ConfigLoader.getTriggerElement("OVERLOADED"), ConfigLoader.getGaugeUnitTax("OVERLOADED"));
     }
 
     @Override
-    public void trigger(DamagePacket damage, double gauge_unit, String decay_rate, LivingEntity entity, @Nullable Entity damager, EntityDamageEvent.DamageCause damage_cause) {
-
-        if (damage.getElement() == null) return;
-        getAuraData(entity.getUniqueId()).removeAura(getTrigger());
-        double final_gauge_unit = gauge_unit * ConfigLoader.getGaugeUnitTax(getId());
-        getAuraData(entity.getUniqueId()).reduceAura(getAura(), final_gauge_unit);
+    public void trigger(DamagePacket damage, double gauge_unit, String decay_rate, @Nullable Entity damager, LivingEntity entity, EntityDamageEvent.DamageCause damage_cause) {
 
         int attacker_level = 1;
         double elemental_mastery = 0;

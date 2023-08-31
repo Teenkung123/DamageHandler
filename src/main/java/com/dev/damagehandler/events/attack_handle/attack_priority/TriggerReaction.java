@@ -3,6 +3,7 @@ package com.dev.damagehandler.events.attack_handle.attack_priority;
 import com.dev.damagehandler.DamageHandler;
 import com.dev.damagehandler.listener.events.MobAttackEvent;
 import com.dev.damagehandler.reaction.ElementalReaction;
+import com.dev.damagehandler.reaction.reaction_type.TriggerAuraReaction;
 import com.dev.damagehandler.stats.provider.ASTEntityStatProvider;
 import com.dev.damagehandler.utils.ConfigLoader;
 import io.lumine.mythic.lib.api.event.AttackEvent;
@@ -89,8 +90,10 @@ public class TriggerReaction {
             }));
         }
         for (ElementalReaction elementalReaction : reactions) {
-            if (elementalReaction.getTrigger().equals(damage.getElement().getId()) && DamageHandler.getAura().getAura(entity.getUniqueId()).getMapAura().containsKey(elementalReaction.getAura())) {
-                elementalReaction.trigger(damage, gauge_unit, decay_rate, entity, damager, damage_cause);
+            if (elementalReaction instanceof TriggerAuraReaction) {
+                if (elementalReaction.getTrigger().equals(damage.getElement().getId()) && DamageHandler.getAura().getAura(entity.getUniqueId()).getMapAura().containsKey(elementalReaction.getAura())) {
+                    elementalReaction.trigger(damage, gauge_unit, decay_rate, entity, damager, damage_cause);
+                }
             }
         }
     }

@@ -22,7 +22,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -89,7 +88,7 @@ public class ElementModifier implements Listener {
                             double gauge_unit = Double.parseDouble(Utils.splitTextAndNumber(variables.getString("AST_ELEMENTAL_DAMAGE_GAUGE_UNIT"))[0]);
                             String decay_rate = Utils.splitTextAndNumber(variables.getString("AST_ELEMENTAL_DAMAGE_GAUGE_UNIT"))[1];
                             DamageHandler.getAura().getAura(event.getEntity().getUniqueId()).addAura(element.getId(), gauge_unit, decay_rate);
-                            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> TriggerReaction.triggerReactions(event.getDamage().getPackets().get(0), gauge_unit, decay_rate, event.getEntity(), e.getDamager(), EntityDamageEvent.DamageCause.ENTITY_ATTACK));
+                            Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> TriggerReaction.triggerReactions(event.getDamage().getPackets().get(0), gauge_unit, decay_rate, event.getEntity(), e.getDamager(), event.toBukkit().getCause()));
 
                             return;
                         }
@@ -110,7 +109,7 @@ public class ElementModifier implements Listener {
                                 double gauge_unit = Double.parseDouble(Utils.splitTextAndNumber(variables.getString("AST_ELEMENTAL_DAMAGE_GAUGE_UNIT"))[0]);
                                 String decay_rate = Utils.splitTextAndNumber(variables.getString("AST_ELEMENTAL_DAMAGE_GAUGE_UNIT"))[1];
                                 DamageHandler.getAura().getAura(event.getEntity().getUniqueId()).addAura(element.getId(), gauge_unit, decay_rate);
-                                Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> TriggerReaction.triggerReactions(event.getDamage().getPackets().get(0), gauge_unit, decay_rate, event.getEntity(), e.getDamager(), EntityDamageEvent.DamageCause.ENTITY_ATTACK));
+                                Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> TriggerReaction.triggerReactions(event.getDamage().getPackets().get(0), gauge_unit, decay_rate, event.getEntity(), e.getDamager(), event.toBukkit().getCause()));
 
                                 return;
                             }

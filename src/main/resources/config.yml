@@ -38,7 +38,7 @@ Elemental-Reaction:
     trigger-element: ELECTRO
     gauge-unit-tax: 1.25
     resistance-element: PYRO
-    damage-formula: "2 * (16.12 * (attacker_level + 16 ) - 257.23) * (1+ (16*(elemental_mastery/(elemental_mastery + 2000))) ) * resistance_multiplier"
+    damage-formula: "2 * (16.12 * (attacker_level + 16 ) - 257.23) * (1+ (16*(elemental_mastery/(elemental_mastery + 2000)))) * resistance_multiplier"
     damage-indicator:
       - "&c{damage}"
       - "&cOverloaded"
@@ -48,7 +48,7 @@ Elemental-Reaction:
     trigger-element: PYRO
     gauge-unit-tax: 1.25
     resistance-element: PYRO
-    damage-formula: "2 * (16.12 * (attacker_level + 16 ) - 257.23) * (1+ (16*(elemental_mastery/(elemental_mastery + 2000))) ) * resistance_multiplier"
+    damage-formula: "2 * (16.12 * (attacker_level + 16 ) - 257.23) * (1+ (16*(elemental_mastery/(elemental_mastery + 2000)))) * resistance_multiplier"
     damage-indicator:
       - "&c{damage}"
       - "&cOverloaded"

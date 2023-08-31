@@ -96,6 +96,7 @@ public class elemental_damage implements ITargetedEntitySkill {
 
                 AttackMetadata attack = new AttackMetadata(damage, (LivingEntity) bukkittarget, new ASTEntityStatProvider((LivingEntity) bukkitcaster));
                 //Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> MythicLib.plugin.getDamage().registerAttack(attack, false, true));
+
                 Bukkit.getScheduler().runTask(DamageHandler.getInstance(), ()-> DamageManager.registerAttack(attack, false, false, EntityDamageEvent.DamageCause.ENTITY_ATTACK));
 
                 for (DamagePacket packet : damage.getPackets()) {

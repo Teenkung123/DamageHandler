@@ -41,7 +41,7 @@ public final class DamageHandler extends JavaPlugin {
      */
 
     // TODO: เลียงตามลำดับ
-    //  1. Level Difference Multiplier (waiting for DJKlaKung)
+    //  1. Level Difference Multiplier (Done)
     //  2. Elemental Inflection (Done)
     //  3. Resistance Reduction & Defense Reduction (Done)
     //  4. Entity Elemental Inflection Status

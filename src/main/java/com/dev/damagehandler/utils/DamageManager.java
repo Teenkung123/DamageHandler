@@ -74,15 +74,14 @@ public class DamageManager {
                 }
             } else {
                 Validate.isTrue(damage > 0.0, "Damage must be strictly positive");
-                target.damage(damage, damager);
                 if (damager == null) {
-                    Bukkit.broadcastMessage(damage_cause.name());
-                    EntityDamageEvent event = new EntityDamageEvent(target, damage_cause, target.getHealth());
+                    target.setHealth(Math.max(0, target.getHealth() - damage));
+                    EntityDamageEvent event = new EntityDamageEvent(target, damage_cause, damage);
                     target.setLastDamageCause(event);
-                    Bukkit.getServer().getPluginManager().callEvent(event);
-                    //Bukkit.getServer().getPluginManager().callEvent(event);
+                    Bukkit.getPluginManager().callEvent(event);
+                } else {
+                    target.damage(damage, damager);
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
